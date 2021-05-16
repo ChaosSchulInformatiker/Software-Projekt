@@ -10,7 +10,7 @@ fun main() {
     embeddedServer(Netty, port = 80) {
         routing {
             get ("/") {
-                call.respondText("Hello, world!")
+                call.respondText("Hallo, Welt!")
             }
         }
     }.start(wait = true)
