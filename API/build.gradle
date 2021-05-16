@@ -1,0 +1,10 @@
+plugins {
+    id 'java'
+}
+
+group 'tk.q11mk'
+version '0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
