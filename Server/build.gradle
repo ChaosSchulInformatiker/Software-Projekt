@@ -2,6 +2,10 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.32'
 }
 
+plugins {
+    id "com.xcporter.metaview" version "0.0.4"
+}
+
 group 'tk.q11mk'
 version '0.1-SNAPSHOT'
 
@@ -17,4 +21,9 @@ dependencies {
     implementation "io.ktor:ktor-server-core:1.5.4"
     implementation "io.ktor:ktor-server-netty:1.5.4"
     implementation "ch.qos.logback:logback-classic:1.2.3"
+}
+
+generateUml {
+    classTree {}
+    functionTree {}
 }
