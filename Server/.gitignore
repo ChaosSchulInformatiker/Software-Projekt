@@ -5,3 +5,5 @@
 build/classes
 build/kotlin
 # Not build/docs
+
+out
