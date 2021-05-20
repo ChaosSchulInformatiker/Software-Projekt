@@ -27,6 +27,17 @@ dependencies {
     implementation "com.googlecode.json-simple:json-simple:1.1.1"
 }
 
+// MySQL
+dependencies {
+    implementation "mysql:mysql-connector-java:8.0.25"
+}
+
+compileKotlin {
+    kotlinOptions {
+        freeCompilerArgs = freeCompilerArgs + "-Xallow-result-return-type"
+    }
+}
+
 generateUml {
     classTree {}
     functionTree {}

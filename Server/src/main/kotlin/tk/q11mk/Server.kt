@@ -1,6 +1,7 @@
 package tk.q11mk
 
 import io.ktor.application.*
+import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -24,6 +25,10 @@ fun main() {
                 }
 
             }
+
+            post("/register/{id}") {
+                call.respondText("Ok")
+            }
         }
     }.start(wait = true)
 }
@@ -32,33 +37,33 @@ suspend fun ApplicationCall.respondJsonSerializable(json: JSONSerializable) {
     var jsonObject: JSONObject? = null
     val responseCode = try {
         jsonObject = json.serialize()
-        "200"
+        200
     } catch (e: RequestException) {
         e.responseCode
     } catch (e: Throwable) {
-        "500"
+        500
     }
     respondJsonObject(jsonObject ?: JSONObject(), responseCode)
 }
 
-suspend fun ApplicationCall.respondJsonObject(json: JSONObject, responseCode: String = "200") {
+suspend fun ApplicationCall.respondJsonObject(json: JSONObject, responseCode: Int = 200) {
     respondJson(JSONArray().apply { add(json) }, responseCode)
 }
 
 suspend fun ApplicationCall.respond400() {
-    respondJson(JSONArray(), "400")
+    respondJson(JSONArray(), 400)
 }
 
-suspend fun ApplicationCall.respondJson(json: JSONArray, responseCode: String = "200") {
+suspend fun ApplicationCall.respondJson(json: JSONArray, responseCode: Int = 200) {
     val root = JSONObject()
 
-    root["responseCode"] = responseCode
+    //root["responseCode"] = responseCode
 
     root["timestamp"] = System.currentTimeMillis()
 
     root["result"] = json
 
-    respondText(root.toJSONString())
+    respondText(root.toJSONString(), status = HttpStatusCode.fromValue(responseCode))
 }
 
 private val exampleSchedule = Schedule(
