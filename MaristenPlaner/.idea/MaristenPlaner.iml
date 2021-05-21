@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="android-gradle" name="Android-Gradle">
+      <configuration>
+        <option name="GRADLE_PROJECT_PATH" value=":" />
+        <option name="LAST_SUCCESSFUL_SYNC_AGP_VERSION" value="4.0.1" />
+        <option name="LAST_KNOWN_AGP_VERSION" value="4.0.1" />
+      </configuration>
+    </facet>
+    <facet type="android" name="Android">
+      <configuration>
+        <option name="SELECTED_BUILD_VARIANT" value="debug" />
+        <option name="ASSEMBLE_TASK_NAME" value="assembleDebug" />
+        <option name="COMPILE_JAVA_TASK_NAME" value="compileDebugSources" />
+        <afterSyncTasks>
+          <task>generateDebugSources</task>
+        </afterSyncTasks>
+        <option name="ALLOW_USER_CONFIGURATION" value="false" />
+        <option name="MANIFEST_FILE_RELATIVE_PATH" value="/src/androidMain/AndroidManifest.xml" />
+        <option name="RES_FOLDER_RELATIVE_PATH" value="/src/main/res" />
+        <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/src/main/res;file://$MODULE_DIR$/src/androidMain/res;file://$MODULE_DIR$/src/debug/res;file://$MODULE_DIR$/src/androidDebug/res;file://$MODULE_DIR$/build/generated/res/rs/debug" />
+        <option name="TEST_RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/src/androidTest/res;file://$MODULE_DIR$/src/androidAndroidTest/res;file://$MODULE_DIR$/src/androidTestDebug/res;file://$MODULE_DIR$/src/androidAndroidTestDebug/res;file://$MODULE_DIR$/build/generated/res/rs/androidTest/debug" />
+        <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/src/main/assets" />
+      </configuration>
+    </facet>
+    <facet type="kotlin-language" name="Kotlin">
+      <configuration version="3" platform="JVM 1.6" allPlatforms="JVM [1.6]" useProjectSettings="false" isTestModule="false" externalProjectId="MaristenPlaner" isHmppProject="true" pureKotlinSourceFolders="D:\IdeaProjects\Software-Projekt\MaristenPlaner\src\commonMain\kotlin">
+        <dependsOnModuleNames>MaristenPlaner:commonMain</dependsOnModuleNames>
+        <sourceSets>
+          <sourceSet>MaristenPlaner.commonMain~1</sourceSet>
+        </sourceSets>
+        <newMppModelJpsModuleKind>COMPILATION_AND_SOURCE_SET_HOLDER</newMppModelJpsModuleKind>
+        <compilerSettings>
+          <option name="additionalArguments" value="-Xallow-no-source-files" />
+        </compilerSettings>
+        <compilerArguments>
+          <option name="destination" value="$MODULE_DIR$/build/tmp/kotlin-classes/debug" />
+          <option name="classpath" value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-android-extensions-runtime/1.4.32/2b6e48d05eccf8f25668f49fb79181e72ebdba3a/kotlin-android-extensions-runtime-1.4.32.jar;C:/Users/Simon/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.4.32/461367948840adbb0839c51d91ed74ef4a9ccb52/kotlin-stdlib-1.4.32.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/95aefcace8cdcacefcc84b06be0ab15f/material-1.2.1-api.jar;C:/Users/Simon/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.4.32/ef50bfa2c0491a11dcc35d9822edbfd6170e1ea2/kotlin-stdlib-common-1.4.32.jar;C:/Users/Simon/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/79e9be9df1fddc9b438b456705d775f9/appcompat-1.1.0-api.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/8ee441f7bd5d563b3945b85d7e7039b1/cardview-1.0.0-api.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/13f3eb917606c9d0af6291140a37bed4/coordinatorlayout-1.1.0-api.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/04e7f477a4a7406d0478bf6befc63e4e/viewpager2-1.0.0-api.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/9ae614eb15e2ff923739e6250542b59d/fragment-1.1.0-api.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/c23675c95f106b6779298d2a6a7d9f34/recyclerview-1.1.0-api.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/d29524fa0984eb8179ae894449f9843a/transition-1.2.0-api.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/954f955622415e6b51ac10ae99ee5039/appcompat-resources-1.1.0-api.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/54be593069349e73a66b5465c005acb6/vectordrawable-animated-1.1.0-api.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/081a624bfd58fd0242d390a3eee73b5f/vectordrawable-1.1.0-api.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/86a37b884efc2f7edb2f8c73f6de72b8/drawerlayout-1.0.0-api.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/5cc6ae422a644623d8031fcbc08a7abf/viewpager-1.0.0-api.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/c1d35533f852e9e6143096c80917e56d/customview-1.0.0-api.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/185629d99a5eb83f9e65043d4c2167fc/loader-1.0.0-api.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/3efcb412a844c755268492a9f309f097/activity-1.0.0-api.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/702e6cb355f0f99142003018c9f380b1/core-1.2.0-api.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/eadbd8cb024912447cab29fc7485d392/lifecycle-runtime-2.1.0-api.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/e996e87478a591e2a6484d6c51ac0444/cursoradapter-1.0.0-api.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/b97b8805e1cffae6a548b52595bc21a3/versionedparcelable-1.1.0-api.jar;C:/Users/Simon/.gradle/caches/modules-2/files-2.1/androidx.collection/collection/1.1.0/1f27220b47669781457de0d600849a5de0e89909/collection-1.1.0.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/0e2b49c407da0b5a660b44a481d1bef0/lifecycle-viewmodel-2.1.0-api.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/23460eae7c4ae2accea4b65f3f3f4a10/savedstate-1.0.0-api.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/cea592229607d989b5ce4abea68e10b4/lifecycle-livedata-2.0.0-api.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/5699d01e6b7d7df5714f0a7e8ef25fc7/lifecycle-livedata-core-2.0.0-api.jar;C:/Users/Simon/.gradle/caches/modules-2/files-2.1/androidx.lifecycle/lifecycle-common/2.1.0/c67e7807d9cd6c329b9d0218b2ec4e505dd340b7/lifecycle-common-2.1.0.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/9230b2c4e59f5b506efce6a06829cfa4/core-runtime-2.0.0-api.jar;C:/Users/Simon/.gradle/caches/modules-2/files-2.1/androidx.arch.core/core-common/2.1.0/b3152fc64428c9354344bd89848ecddc09b6f07e/core-common-2.1.0.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/af898c7f4a61cd8b24fbff9680f18783/interpolator-1.0.0-api.jar;C:/Users/Simon/.gradle/caches/modules-2/files-2.1/androidx.annotation/annotation/1.1.0/e3a6fb2f40e3a3842e6b7472628ba4ce416ea4c8/annotation-1.1.0.jar;C:/Users/Simon/.gradle/caches/transforms-2/files-2.1/76a302cc3a81fb770916a7ee195c86a5/annotation-experimental-1.0.0-api.jar;C:/Users/Simon/AppData/Local/Android/Sdk/platforms/android-29/android.jar" />
+          <option name="noStdlib" value="true" />
+          <option name="noReflect" value="true" />
+          <option name="moduleName" value="MaristenPlaner_debug" />
+          <option name="languageVersion" value="1.4" />
+          <option name="apiVersion" value="1.4" />
+          <option name="pluginOptions">
+            <array>
+              <option value="plugin:org.jetbrains.kotlin.android:experimental=false" />
+              <option value="plugin:org.jetbrains.kotlin.android:enabled=true" />
+              <option value="plugin:org.jetbrains.kotlin.android:defaultCacheImplementation=hashMap" />
+            </array>
+          </option>
+          <option name="pluginClasspaths">
+            <array>
+              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.intellij.deps/trove4j/1.0.20181211/216c2e14b070f334479d800987affe4054cd563f/trove4j-1.0.20181211.jar" />
+              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-android-extensions/1.4.32/644a06f42aee2f320738b90e4f11120f52f52333/kotlin-android-extensions-1.4.32.jar" />
+              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-compiler-embeddable/1.4.32/b4fc9be460ca88eecea2303e142ce2920bd14775/kotlin-compiler-embeddable-1.4.32.jar" />
+              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-daemon-embeddable/1.4.32/b40c5de5adea26ebb4e5fc36945c482ac20acee2/kotlin-daemon-embeddable-1.4.32.jar" />
+              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-reflect/1.4.32/ce852b166d97f0f1991b5130c2bb02e2ef6c554e/kotlin-reflect-1.4.32.jar" />
+              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-script-runtime/1.4.32/bac50b0748be017dbc13fc1cb7231b1c9da0e106/kotlin-script-runtime-1.4.32.jar" />
+              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-common/1.4.32/6abda0fe69677f0e46e7539fd185e4bd093b7258/kotlin-scripting-common-1.4.32.jar" />
+              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-jvm/1.4.32/49656d531bfab9d6e45d3f27bc4d03b542d6766/kotlin-scripting-jvm-1.4.32.jar" />
+              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.4.32/ef50bfa2c0491a11dcc35d9822edbfd6170e1ea2/kotlin-stdlib-common-1.4.32.jar" />
+              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.4.32/461367948840adbb0839c51d91ed74ef4a9ccb52/kotlin-stdlib-1.4.32.jar" />
+              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-core/1.3.8/f62be6d4cbf27781c2969867b4ed952f38378492/kotlinx-coroutines-core-1.3.8.jar" />
+              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar" />
+            </array>
+          </option>
+          <option name="multiPlatform" value="true" />
+          <option name="errors">
+            <ArgumentParseErrors />
+          </option>
+        </compilerArguments>
+      </configuration>
+    </facet>
+  </component>
+</module>

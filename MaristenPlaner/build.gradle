@@ -1,0 +1,94 @@
+plugins {
+    id 'org.jetbrains.kotlin.multiplatform' version '1.4.32'
+    id 'com.android.application'
+    id 'kotlin-android-extensions'
+}
+
+group = 'tk.q11mk'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    google()
+    mavenCentral()
+}
+
+kotlin {
+    jvm {
+        compilations.all {
+            kotlinOptions.jvmTarget = '1.8'
+        }
+        testRuns["test"].executionTask.configure {
+            useJUnit()
+        }
+    }
+    js(LEGACY) {
+        binaries.executable()
+        browser {
+            commonWebpackConfig {
+                cssSupport.enabled = true
+            }
+        }
+    }
+    android()
+    iosArm64 {
+        binaries {
+            framework {
+                baseName = 'mainModule'
+            }
+        }
+    }
+    sourceSets {
+        commonMain {
+
+        }
+        commonTest {
+            dependencies {
+                implementation kotlin('test-common')
+                implementation kotlin('test-annotations-common')
+            }
+        }
+        jvmMain {
+
+        }
+        jvmTest {
+            dependencies {
+                implementation kotlin('test-junit')
+            }
+        }
+        jsMain {
+
+        }
+        jsTest {
+            dependencies {
+                implementation kotlin('test-js')
+            }
+        }
+        androidMain {
+            dependencies {
+                implementation 'com.google.android.material:material:1.2.1'
+            }
+        }
+        androidTest {
+            dependencies {
+                implementation kotlin('test-junit')
+                implementation 'junit:junit:4.13'
+            }
+        }
+        iosArm64Main {
+
+        }
+        iosArm64Test {
+
+        }
+    }
+}
+
+android {
+    compileSdkVersion 29
+    sourceSets.main.manifest.srcFile('src/androidMain/AndroidManifest.xml')
+    defaultConfig {
+        applicationId 'tk.q11mk.maristenPlaner'
+        minSdkVersion 24
+        targetSdkVersion 29
+    }
+}
