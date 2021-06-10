@@ -19,5 +19,5 @@
 
 ***⚠ Diese Software ist nur für das Maristenkolleg Mindelheim bestimmt!***
 
-Probe lauf
+
 ###### *Erstellt mit ♥ & 🧠 von Simon, Visar, Leo, Kayra & Maximillian | Abijahrgang 2020/2022*
