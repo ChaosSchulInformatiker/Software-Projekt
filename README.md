@@ -18,6 +18,6 @@
 - ✔ Schnelles Nachschauen des Mensaplans jederzeit und überall
 
 ***⚠ Diese Software ist nur für das Maristenkolleg Mindelheim bestimmt!***
-
+Test
 
 ###### *Erstellt mit ♥ & 🧠 von Simon, Visar, Leo, Kayra & Maximillian | Abijahrgang 2020/2022*
