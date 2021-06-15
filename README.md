@@ -1,5 +1,5 @@
 # MaristenPlaner
-<!--[![Codacy Badge](https://app.codacy.com/project/badge/Grade/f74ec9a25b564e30bd1daf816f77104e)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Q11-Maristenkolleg/Software-Projekt&amp;utm_campaign=Badge_Grade)-->
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/f74ec9a25b564e30bd1daf816f77104e)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Q11-Maristenkolleg/Software-Projekt&amp;utm_campaign=Badge_Grade)
 ## 👋 Hallo! Dieses Software-Projekt handelt von einem/r
 
 - 📅 Digitalen Stundenplan für Schüler und Lehrer
