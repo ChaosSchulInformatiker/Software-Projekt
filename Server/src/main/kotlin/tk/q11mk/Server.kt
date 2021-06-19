@@ -10,10 +10,13 @@ import io.ktor.server.netty.*
 import io.ktor.util.pipeline.*
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
+import tk.q11mk.accounts.getEmailAccount
+import tk.q11mk.accounts.sendCode
 import tk.q11mk.schedule.Schedule
+import tk.q11mk.utils.getPublicProperty
 
 fun main() {
-    embeddedServer(Netty, port = 80) {
+    embeddedServer(Netty, port = getPublicProperty("port").toInt()) {
         routing {
             get("/schedule/{id}") {
                 val id = call.parameters["id"]
@@ -26,8 +29,22 @@ fun main() {
 
             }
 
-            post("/register/{id}") {
-                call.respondText("Ok")
+            get("/register") {
+                val firstName = call.request.queryParameters["first"]
+                val lastName = call.request.queryParameters["last"]
+
+                if (firstName == null || lastName == null) {
+                    call.respond400()
+                    return@get
+                }
+
+                sendCode(firstName, getEmailAccount(firstName, lastName))
+
+                call.respondJsonSerializable(object : JSONSerializable {
+                    override fun serialize(): JSONObject {
+                        return JSONObject()
+                    }
+                })
             }
         }
     }.start(wait = true)

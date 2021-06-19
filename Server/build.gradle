@@ -30,8 +30,13 @@ dependencies {
     implementation "mysql:mysql-connector-java:8.0.25"
 }
 
+compileJava {
+    options.encoding = 'UTF-8'
+}
+
 compileKotlin {
     kotlinOptions {
+        jvmTarget = '15'
         freeCompilerArgs = freeCompilerArgs + "-Xallow-result-return-type"
     }
 }

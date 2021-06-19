@@ -11,7 +11,7 @@ import javax.mail.internet.MimeMessage;
 
 public class Mail {
 
-    public void sendEmail(String sender, String receiver, String password, String schuelerName, int code) {
+    public static void sendEmail(String sender, String receiver, String password, String firstName, int code) {
 
         String host = "smtp.gmail.com";
 
@@ -25,14 +25,12 @@ public class Mail {
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
 
             protected PasswordAuthentication getPasswordAuthentication() {
-
                 return new PasswordAuthentication(sender, password); //agvbenttxknqgrji
-
             }
 
         });
 
-        session.setDebug(true);
+        //session.setDebug(true);
 
         try {
             MimeMessage message = new MimeMessage(session);
@@ -40,7 +38,7 @@ public class Mail {
             message.setFrom(new InternetAddress(sender));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
             message.setSubject("Bestätigungscode");
-            message.setText("Hallo "+schuelerName+",\n\nDein Code lautet: "+code+"\n\nMit freundlichen Grüßen,\n\nIhr Maristenplaner-Team");
+            message.setText("Hallo "+firstName+",\n\nDein Code lautet: "+code+"\n\nMit freundlichen Grüßen,\n\nIhr Maristenplaner-Team");
             Transport.send(message);
         } catch (MessagingException mex) {
             mex.printStackTrace();
