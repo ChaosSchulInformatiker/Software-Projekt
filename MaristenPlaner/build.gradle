@@ -85,7 +85,7 @@ kotlin {
 
 android {
     compileSdkVersion 29
-    sourceSets.main.manifest.srcFile('src/androidMain/AndroidManifest.xml')
+    sourceSets.main.manifest.srcFile('android/src/main/AndroidManifest.xml')
     defaultConfig {
         applicationId 'tk.q11mk.maristenPlaner'
         minSdkVersion 24
