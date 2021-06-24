@@ -4,3 +4,17 @@
 # These are explicitly windows files and should use crlf
 *.bat           text eol=crlf
 
+App/maristen_planer/ios/Flutter/* linguist-generated
+App/maristen_planer/ios/Runner/* linguist-generated
+App/maristen_planer/ios/Runnter.xcodeproj/* linguist-generated
+App/maristen_planer/ios/Runner.xcworkspace/* linguist-generated
+
+App/maristen_planer/linux/flutter/* linguist-generated
+
+App/maristen_planer/macos/Flutter/* linguist-generated
+App/maristen_planer/macos/Runner/* linguist-generated
+App/maristen_planer/macos/Runnter.xcodeproj/* linguist-generated
+App/maristen_planer/macos/Runner.xcworkspace/* linguist-generated
+
+App/maristen_planer/windows/flutter/* linguist-generated
+App/maristen_planer/windows/runner/* linguist-generated
