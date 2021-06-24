@@ -38,13 +38,7 @@ fun main() {
                     return@get
                 }
 
-                sendCode(firstName, getEmailAccount(firstName, lastName))
-
-                call.respondJsonSerializable(object : JSONSerializable {
-                    override fun serialize(): JSONObject {
-                        return JSONObject()
-                    }
-                })
+                call.respondJsonSerializable(sendCode(firstName, lastName))
             }
         }
     }.start(wait = true)
