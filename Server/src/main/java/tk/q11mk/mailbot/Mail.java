@@ -1,17 +1,13 @@
 package tk.q11mk.mailbot;
 
 import java.util.Properties;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
+import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class Mail {
 
-    public static void sendEmail(String sender, String receiver, String password, String firstName, int code) {
+    public static void sendEmail(String sender, String receiver, String password, String firstName, int code) throws MessagingException {
 
         String host = "smtp.gmail.com";
 
@@ -32,7 +28,7 @@ public class Mail {
 
         //session.setDebug(true);
 
-        try {
+        //try {
             MimeMessage message = new MimeMessage(session);
 
             message.setFrom(new InternetAddress(sender));
@@ -40,8 +36,8 @@ public class Mail {
             message.setSubject("Bestätigungscode");
             message.setText("Hallo "+firstName+",\n\nDein Code lautet: "+code+"\n\nMit freundlichen Grüßen,\n\nIhr Maristenplaner-Team");
             Transport.send(message);
-        } catch (MessagingException mex) {
-            mex.printStackTrace();
-        }
+        // catch (MessagingException mex) {
+        //   mex.printStackTrace();
+        //
     }
 }
