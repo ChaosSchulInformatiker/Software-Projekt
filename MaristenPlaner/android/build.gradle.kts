@@ -1,9 +1,9 @@
 import org.jetbrains.compose.compose
 
 plugins {
-    id "com.android.application"
+    id("com.android.application")
     kotlin("android")
-    id "org.jetbrains.compose"
+    id("org.jetbrains.compose")
 }
 
 android {
@@ -27,10 +27,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":common:database"))
-    implementation(project(":common:utils"))
-    implementation(project(":common:root"))
-    implementation(project(":common:compose-ui"))
+    //implementation(project(":common:database"))
+    //implementation(project(":common:utils"))
+    //implementation(project(":common:root"))
+    //implementation(project(":common:compose-ui"))
     implementation(compose.material)
     implementation(Deps.ArkIvanov.MVIKotlin.mvikotlin)
     implementation(Deps.ArkIvanov.MVIKotlin.mvikotlinMain)
