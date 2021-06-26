@@ -1,5 +1,5 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.4.32'
+    id 'org.jetbrains.kotlin.jvm' version '1.5.10'
 }
 
 plugins {
@@ -36,7 +36,7 @@ compileJava {
 
 compileKotlin {
     kotlinOptions {
-        jvmTarget = '15'
+        jvmTarget = '16'
         freeCompilerArgs = freeCompilerArgs + "-Xallow-result-return-type"
     }
 }

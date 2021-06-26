@@ -1,7 +1,8 @@
 # Ignore Gradle project-specific cache directory
 .gradle
-MaristenPlaner/.idea
-MaristenPlaner/local.properties
 
 # Ignore Gradle build output directory
 build
+
+# Secret properties
+src/main/resources/secret.properties

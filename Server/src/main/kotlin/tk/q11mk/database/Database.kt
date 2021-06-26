@@ -34,6 +34,12 @@ class Database(url: String, username: String, password: String) : AutoCloseable 
         Result.failure(e)
     }
 
+    fun getSchema(name: String) = try {
+        throw SQLException()
+    } catch (e: SQLException) {
+        Result.failure<Schema>(e)
+    }
+
     override fun close() {
         connection.close()
         stmt.close()

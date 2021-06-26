@@ -1,10 +1,11 @@
 package tk.q11mk.database
 
+import tk.q11mk.JSONSerializable
 import java.sql.SQLException
 import java.sql.Statement
 
-class Table internal constructor(val name: String, pkName: String, private val schemaName: String, private val stmt: Statement) {
-    private val columns = mutableListOf(Column(pkName, "INT", null, listOf("NOT NULL", "AUTO_INCREMENT")))
+class Table <P> internal constructor(val name: String, pkName: String, private val schemaName: String, private val stmt: Statement) {
+    private val columns: MutableList<Column<*>> = mutableListOf(Column(pkName, Column.Type.INT, null, listOf("NOT NULL", "AUTO_INCREMENT")))
 
     /**
      * Add a column at the end of the table
@@ -17,7 +18,7 @@ class Table internal constructor(val name: String, pkName: String, private val s
      *
      * @author Simon
      */
-    fun addColumn(name: String, type: String, default: String? = null, vararg flags: String) =
+    fun <T> addColumn(name: String, type: Column.Type<T>, default: T? = null, vararg flags: String) =
         addColumnAfter(name, type, default, columns.last().name, *flags)
 
     /**
@@ -28,7 +29,7 @@ class Table internal constructor(val name: String, pkName: String, private val s
      *
      * @author Simon
      */
-    fun addColumnAfter(name: String, type: String, default: String? = null, after: String, vararg flags: String) = try {
+    fun <T> addColumnAfter(name: String, type: Column.Type<T>, default: T? = null, after: String, vararg flags: String) = try {
         stmt.executeUpdate("ALTER TABLE `$schemaName`.`${this.name}`\nADD COLUMN `$name` $type ${
             if ("NOT NULL" in flags) "" else "NULL"
         } ${flags.joinToString(" ")} ${default?.let { "DEFAULT $it" } ?: ""} AFTER `$after`;")
@@ -39,5 +40,21 @@ class Table internal constructor(val name: String, pkName: String, private val s
         Result.failure(e)
     }
 
-    data class Column internal constructor(val name: String, val type: String, val default: String? = null, val flags: List<String>)
+    fun <T> getCell(pk: P, column: String): Result<T> = try {
+        throw SQLException()
+    } catch (e: SQLException) {
+        Result.failure<Nothing>(e)
+    }
+
+    data class Column<T> internal constructor(val name: String, val type: Type<T>, val default: T? = null, val flags: List<String>) {
+        class Type<T> private constructor(val str: String) {
+            override fun toString() = str
+
+            companion object {
+                val STRING = Type<String>("STRING")
+                val INT = Type<Int>("INT")
+                val JSON = Type<String>("JSON")
+            }
+        }
+    }
 }

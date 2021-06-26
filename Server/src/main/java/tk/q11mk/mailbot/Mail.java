@@ -29,13 +29,14 @@ public class Mail {
         //session.setDebug(true);
 
         //try {
-            MimeMessage message = new MimeMessage(session);
+        MimeMessage message = new MimeMessage(session);
 
-            message.setFrom(new InternetAddress(sender));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
-            message.setSubject("Bestätigungscode");
-            message.setText("Hallo "+firstName+",\n\nDein Code lautet: "+code+"\n\nMit freundlichen Grüßen,\n\nIhr Maristenplaner-Team");
-            Transport.send(message);
+        message.setFrom(new InternetAddress(sender));
+        System.out.println("sent "+receiver);
+        message.addRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
+        message.setSubject("Bestätigungscode");
+        message.setText("Hallo "+firstName+",\n\nDein Code lautet: "+code+"\n\nMit freundlichen Grüßen,\n\nIhr Maristenplaner-Team");
+        Transport.send(message);
         // catch (MessagingException mex) {
         //   mex.printStackTrace();
         //

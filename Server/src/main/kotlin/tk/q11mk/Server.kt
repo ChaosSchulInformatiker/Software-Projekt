@@ -8,12 +8,17 @@ import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.util.pipeline.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import tk.q11mk.accounts.getEmailAccount
+import tk.q11mk.accounts.receiveCode
 import tk.q11mk.accounts.sendCode
+import tk.q11mk.database.Database
 import tk.q11mk.schedule.Schedule
 import tk.q11mk.utils.getPublicProperty
+import tk.q11mk.utils.getSecretProperty
 
 fun main() {
     embeddedServer(Netty, port = getPublicProperty("port").toInt()) {
@@ -26,12 +31,11 @@ fun main() {
                 } else {
                     call.respond400()
                 }
-
             }
 
             get("/register") {
-                val firstName = call.request.queryParameters["first"]
-                val lastName = call.request.queryParameters["last"]
+                val firstName = call.request.queryParameters["first_name"]
+                val lastName = call.request.queryParameters["last_name"]
 
                 if (firstName == null || lastName == null) {
                     call.respond400()
@@ -39,6 +43,18 @@ fun main() {
                 }
 
                 call.respondJsonSerializable(sendCode(firstName, lastName))
+            }
+
+            get("/login") {
+                val email = call.request.queryParameters["e_mail"]
+                val code = call.request.queryParameters["code"]?.toIntOrNull()
+
+                if (email == null || code == null) {
+                    call.respond400()
+                    return@get
+                }
+
+                call.respondJsonSerializable(receiveCode(email, code))
             }
         }
     }.start(wait = true)
