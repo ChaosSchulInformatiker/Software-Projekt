@@ -15,6 +15,31 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle = TextStyle(
+      fontSize: 30, fontWeight: FontWeight.bold);
+  static const List<Widget> _widgetOptions = <Widget>[
+    Text(
+      'Index 0: Stundenplan',
+      style: optionStyle,
+    ),
+    Text(
+        'Index 1: Mensaplan',
+        style: optionStyle
+    ),
+    Text(
+        'Index 2: Vertretungsplan',
+        style: optionStyle
+    ),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   late Future<Json> schedule;
 
   @override
@@ -31,10 +56,12 @@ class _MyAppState extends State<MyApp> {
     ),
     home: Scaffold(
       appBar: AppBar(
-        title: Text('Dein Stundenplan'),
+        title: Text('MaristenPlaner'),
       ),
-      body: Center(
-        child: FutureBuilder<Json>(
+      body: Column(
+        children: [
+          _widgetOptions.elementAt(_selectedIndex),
+         FutureBuilder<Json>(
           future: schedule,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -46,10 +73,36 @@ class _MyAppState extends State<MyApp> {
             return CircularProgressIndicator();
           },
         ),
+      ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+
+          BottomNavigationBarItem(
+            icon: Icon(Icons.date_range),
+            label: 'Stundenplan',
+          ),
+
+          BottomNavigationBarItem(
+            icon: Icon(Icons.restaurant_menu),
+            label: 'Mensaplan',
+          ),
+
+          BottomNavigationBarItem(
+            icon: Icon(Icons.event_busy),
+            label: 'Vertretungsplan',
+          ),
+
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue,
+        onTap: _onItemTapped,
       ),
     ),
   );
 }
+
+
 
 typedef Json = Map<String, dynamic>;
 
@@ -61,4 +114,7 @@ Future<Json> fetchSchedule() async {
   } else {
     throw Exception('Failed to load schedule');
   }
+
+
 }
+
