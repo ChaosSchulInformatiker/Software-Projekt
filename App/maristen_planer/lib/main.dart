@@ -177,8 +177,9 @@ typedef Json = Map<String, dynamic>;
 
 Future<Json> fetchSchedule() async {
   final response = await http.get(Uri.parse(
-      //'http://loens2.com/maristenplaner/schedule/000000'
-    'https://loens2.com/maristenplaner/schedule/000000'
+    //'http://loens2.com/maristenplaner/schedule/000000'
+    //'https://loens2.com/maristenplaner/schedule/000000'
+    'http://localhost:8000/schedule/000000'
   ));
 
   if (response.statusCode == 200) {
