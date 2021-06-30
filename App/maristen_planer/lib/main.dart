@@ -126,7 +126,7 @@ class _MyAppState extends State<MyApp> {
       ),
       body: Column(
         children: [
-          _widgetOptions.elementAt(_selectedIndex),
+          _widgetOptions[_selectedIndex],
          FutureBuilder<Json>(
           future: schedule,
           builder: (context, snapshot) {
@@ -176,7 +176,10 @@ class _MyAppState extends State<MyApp> {
 typedef Json = Map<String, dynamic>;
 
 Future<Json> fetchSchedule() async {
-  final response = await http.get(Uri.parse('https://www.loens2.com/schedule/000000'));
+  final response = await http.get(Uri.parse(
+      //'http://loens2.com/maristenplaner/schedule/000000'
+    'https://loens2.com/maristenplaner/schedule/000000'
+  ));
 
   if (response.statusCode == 200) {
     return jsonDecode(response.body);
