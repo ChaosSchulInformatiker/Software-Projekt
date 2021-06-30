@@ -1,3 +1,5 @@
+@file:JvmName("Server")
+
 package tk.q11mk
 
 import io.ktor.application.*
