@@ -7,8 +7,8 @@ import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import io.ktor.server.cio.*
 import io.ktor.server.engine.*
-import io.ktor.server.netty.*
 import io.ktor.util.pipeline.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
@@ -23,7 +23,7 @@ import tk.q11mk.utils.getPublicProperty
 import tk.q11mk.utils.getSecretProperty
 
 fun main() {
-    embeddedServer(Netty, port = getPublicProperty("port").toInt()) {
+    embeddedServer(CIO, port = getPublicProperty("port").toInt()) {
         routing {
             get("/schedule/{id}") {
                 val id = call.parameters["id"]
