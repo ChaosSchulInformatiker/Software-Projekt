@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:maristen_planer/utils.dart';
 
 void main() {
   runApp(MyApp());
@@ -97,6 +98,41 @@ class _MyAppState extends State<MyApp> {
     ),
   ];
 
+  Widget _body() {
+    switch (_selectedIndex) {
+      case 0:
+        return FutureBuilder<Json>(
+            future: schedule,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final List<dynamic> lessons = snapshot.data!['result'][0]['days'][/*todayIndex()*/0]['lessons'];
+
+                final column = Column(children: [
+                  Text('Heute (${dayOfSchedule()}):', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold))
+                ]);
+
+                if (lessons.isEmpty) {
+                  column.children.add(Text('Kein Unterricht heute'));
+                  return column;
+                }
+
+                for (Json? lesson in lessons) {
+                  if (lesson == null) column.children.add(Text('-'));
+                  else column.children.add(Text('${lesson['subject']} bei ${lesson['teacher']}'));
+                }
+
+                return column;
+              } else if (snapshot.hasError) {
+                return Text("Fehler: ${snapshot.error}", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold));
+              }
+
+              return CircularProgressIndicator();
+            }
+        );
+    }
+    return Text('Not implemented yet', style: TextStyle(color: Colors.amber));
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -127,19 +163,8 @@ class _MyAppState extends State<MyApp> {
       body: Column(
         children: [
           _widgetOptions[_selectedIndex],
-         FutureBuilder<Json>(
-          future: schedule,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Text(snapshot.data!.toString());
-            } else if (snapshot.hasError) {
-              return Text("Fehler: ${snapshot.error}", style: TextStyle(color: Colors.red));
-            }
-
-            return CircularProgressIndicator();
-          },
-        ),
-      ],
+          _body()
+        ],
       ),
 
       //Building the BottomNavigationBar
@@ -178,10 +203,11 @@ typedef Json = Map<String, dynamic>;
 Future<Json> fetchSchedule() async {
   final response = await http.get(Uri.parse(
     //'http://loens2.com/maristenplaner/schedule/000000'
-    'https://www.loens2.com/maristenplaner/schedule/000000'
+    //'https://www.loens2.com/maristenplaner/schedule/000000'
     //'http://localhost:8000/schedule/000000'
     //'https://api.wynncraft.com/v2/player/visar77/stats'
     //'http://192.168.178.61:8000/schedule/000000'
+    'http://84.164.234.82:25565/schedule/000000'
   ));
 
   if (response.statusCode == 200) {
