@@ -1,68 +1,52 @@
 package tk.q11mk.schedule
 
-import org.json.simple.JSONArray
-import org.json.simple.JSONObject
-import tk.q11mk.JSONDeserializable
-import tk.q11mk.JSONSerializable
-import tk.q11mk.RequestException
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
+@Serializable(with = Schedule.Serializer::class)
 data class Schedule(
     val mo: Day,
     val tu: Day,
     val we: Day,
     val th: Day,
     val fr: Day,
-) : JSONSerializable {
+) {
+    @Serializable
     data class Day(
         val lessons: List<Lesson?>
-    ) : JSONSerializable {
-        override fun serialize(): JSONObject {
-            val lessons = JSONArray()
+    )
 
-            this.lessons.mapTo(lessons) { it?.serialize() }
-
-            return JSONObject().apply { set("lessons", lessons) }
-        }
-
-        companion object : JSONDeserializable<Day> {
-            override fun deserialize(json: JSONObject): Day {
-                TODO("Not yet implemented")
-            }
-        }
-    }
-
+    @Serializable
     data class Lesson(
         val subject: String,
         val teacher: String,
         val room: String?
-    ) : JSONSerializable {
-        override fun serialize(): JSONObject {
-            val lesson = JSONObject()
+    )
 
-            lesson["subject"] = subject
-            lesson["teacher"] = teacher
-            room?.let { lesson["room"] = it }
+    class Serializer : KSerializer<Schedule> {
+        override val descriptor = ScheduleSurrogate.serializer().descriptor
 
-            return lesson
+        override fun serialize(encoder: Encoder, value: Schedule) {
+            encoder.encodeSerializableValue(ScheduleSurrogate.serializer(), ScheduleSurrogate(arrayOf(
+                value.mo, value.tu, value.we, value.th, value.fr
+            )))
+        }
+
+        override fun deserialize(decoder: Decoder): Schedule {
+            val days = decoder.decodeSerializableValue(ScheduleSurrogate.serializer()).days
+            return Schedule(days[0], days[1], days[2], days[3], days[4])
         }
     }
 
-    override fun serialize(): JSONObject {
-        val days = JSONArray()
-
-        arrayOf(mo, tu, we, th, fr).mapTo(days) { it.serialize() }
-
-        return JSONObject().apply { set("days", days) }
-    }
-
-    companion object : JSONDeserializable<Schedule> {
-        override fun deserialize(json: JSONObject): Schedule {
-            val days = (json["days"] as JSONArray).map { Day.deserialize(it as JSONObject) }
-
-            if (days.size != 5)
-                throw RequestException("A week has 5 days!")
-
-            return Schedule(days[0], days[1], days[2], days[2], days[4])
-        }
+    @Serializable
+    @SerialName("Schedule")
+    private class ScheduleSurrogate(@Suppress("unused") val days: Array<Day>) {
+        init { require(days.size == 5) }
     }
 }

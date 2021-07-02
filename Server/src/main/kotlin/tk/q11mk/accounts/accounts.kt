@@ -3,8 +3,9 @@ package tk.q11mk.accounts
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import org.json.simple.JSONObject
-import tk.q11mk.JSONSerializable
 import tk.q11mk.mailbot.Mail
 import tk.q11mk.nextId
 import tk.q11mk.utils.getSecretProperty
@@ -19,7 +20,7 @@ private class VCValue(
     val code: Int
 )
 
-suspend fun CoroutineScope.sendCode(firstName: String, lastName: String): JSONSerializable {
+suspend fun CoroutineScope.sendCode(firstName: String, lastName: String): RegisterResponse {
     var email: String? = null
     val code = generateCode()
     val valid = try {
@@ -35,33 +36,40 @@ suspend fun CoroutineScope.sendCode(firstName: String, lastName: String): JSONSe
         verificationCache[email!!] = VCValue(firstName, lastName, code)
         removeFromVCC(this, email)
     }
-    return object : JSONSerializable {
-        override fun serialize(): JSONObject {
-            val root = JSONObject()
-            root["e_mail"] = email
-            root["valid"] = valid && email != null
-            return root
-        }
-    }
+    return RegisterResponse(email, valid && email != null)
 }
 
-fun receiveCode(email: String, code: Int): JSONSerializable {
+@Serializable
+class RegisterResponse(
+    @SerialName("e_mail") @Suppress("unused") val email: String?,
+    @Suppress("unused") val valid: Boolean
+)
+
+fun receiveCode(email: String, code: Int): LoginResponse {
     val vcValue = verificationCache[email]
     val status = vcValue?.let {
-        if (it.code == code) "SUCCESS" else "WRONG_CODE"
-    } ?: "WRONG_EMAIL"
-    if (status == "SUCCESS") {
+        if (it.code == code) LoginResponse.Status.SUCCESS else LoginResponse.Status.WRONG_CODE
+    } ?: LoginResponse.Status.WRONG_EMAIL
+    if (status == LoginResponse.Status.SUCCESS) {
         verificationCache.remove(email)
         println("login $email")
     }
-    return object : JSONSerializable {
-        override fun serialize() = JSONObject().apply {
-            this["status"] = status
-            this["first_name"] = vcValue?.firstName
-            this["last_name"] = vcValue?.lastName
-            this["id"] = if (status == "SUCCESS") nextId() else null
-        }
-    }
+    return LoginResponse(
+        status,
+        vcValue?.firstName,
+        vcValue?.lastName,
+        if (status == LoginResponse.Status.SUCCESS) nextId() else null
+    )
+}
+
+@Serializable
+class LoginResponse(
+    @Suppress("unused") val status: Status,
+    @SerialName("first_name") @Suppress("unused") val firstName: String?,
+    @SerialName("last_name") @Suppress("unused") val lastName: String?,
+    @Suppress("unused") val id: Long?
+) {
+    enum class Status { SUCCESS, WRONG_CODE, WRONG_EMAIL }
 }
 
 private val random = Random()

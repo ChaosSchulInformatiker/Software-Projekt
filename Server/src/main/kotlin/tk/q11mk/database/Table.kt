@@ -1,6 +1,5 @@
 package tk.q11mk.database
 
-import tk.q11mk.JSONSerializable
 import java.sql.SQLException
 import java.sql.Statement
 
