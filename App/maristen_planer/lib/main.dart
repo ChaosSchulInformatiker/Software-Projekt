@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maristen_planer/constants.dart';
 import 'package:maristen_planer/settings.dart';
 import 'package:maristen_planer/utils.dart';
 import 'package:maristen_planer/widgets/schedule.dart';
@@ -58,7 +59,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) => MaterialApp(
         title: 'MaristenPlaner',
-        theme: ThemeData(primarySwatch: Colors.blue),
+        theme: lightTheme,
+        darkTheme: darkTheme,
         home: Scaffold(
           drawer: SideDrawer(),
           appBar: AppBar(
