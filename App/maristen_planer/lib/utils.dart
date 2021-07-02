@@ -13,3 +13,5 @@ String dayOfSchedule() {
   }
   return 'Keintag';
 }
+
+typedef Json = Map<String, dynamic>;
