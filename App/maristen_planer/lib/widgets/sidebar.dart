@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../settings.dart';
+
 class SideDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,7 @@ class SideDrawer extends StatelessWidget {
             title: Text('Einstellungen'),
             onTap: () {
               Navigator.of(context).pop();
+              openSettings();
               },
           ),
           ListTile(

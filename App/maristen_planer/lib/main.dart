@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:maristen_planer/settings.dart';
 import 'package:maristen_planer/utils.dart';
 import 'package:maristen_planer/widgets/schedule.dart';
 import 'package:maristen_planer/widgets/sidebar.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(app);
 }
+
+final MyApp app = MyApp();
 
 class MyApp extends StatefulWidget {
   MyApp({Key? key}) : super(key: key);
 
   @override
-  State createState() => _MyAppState();
+  State createState() => _mainState;
 }
 
-//Building the SideDrawer
-
-
+final _mainState = _MyAppState();
 
 class _MyAppState extends State<MyApp> {
   //Indexing the menus for the BottomNavigationBar
-
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -50,14 +50,14 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+
     initSchedule();
   }
 
   //Building the App itself
-
   @override
   Widget build(BuildContext context) => MaterialApp(
-        title: 'Stundenplan',
+        title: 'MaristenPlaner',
         theme: ThemeData(primarySwatch: Colors.blue),
         home: Scaffold(
           drawer: SideDrawer(),
@@ -65,11 +65,13 @@ class _MyAppState extends State<MyApp> {
             title: Text('MaristenPlaner'),
           ),
           body: Column(
-            children: [_widgetOptions[_selectedIndex], _body()],
+            children: [
+              _widgetOptions[_selectedIndex],
+              _body()
+            ],
           ),
 
           //Building the BottomNavigationBar
-
           bottomNavigationBar: BottomNavigationBar(
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
