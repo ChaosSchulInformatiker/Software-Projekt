@@ -25,9 +25,9 @@ class _MyAppState extends State<MyApp> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
+  static final List<Widget> _widgetOptions = <Widget>[
     Text(
-      'Index 0: Stundenplan',
+      '${dayOfSchedule()}:',
       style: optionStyle,
     ),
     Text('Index 1: Mensaplan', style: optionStyle),

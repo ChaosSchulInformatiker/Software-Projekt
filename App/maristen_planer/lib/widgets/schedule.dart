@@ -5,7 +5,89 @@ import 'package:maristen_planer/utils.dart';
 import 'package:http/http.dart' as http;
 
 // Für Kayra
+
 Widget _buildSchedule(List<dynamic> lessons) {
+  final rows = <DataRow>[];
+  var i = 0;
+  for (Json? lesson in lessons) {
+    ++i;
+    final li = i == 7 ? 'MP' : i > 7 ? '${i - 1}' : '$i';
+    if (lesson == null)
+      rows.add(
+          DataRow(
+              cells: <DataCell>[
+                DataCell(Text(li)),
+                DataCell(Text('-')),
+                DataCell(Text('')),
+                DataCell(Text('')),
+              ]
+          )
+      );
+    else
+      rows.
+      add(
+          DataRow(
+              cells: <DataCell>[
+                DataCell(Text(li)),
+                DataCell(Text(lesson['subject'])),
+                DataCell(Text(lesson['teacher'])),
+                DataCell(Text(lesson['room'])),
+              ]
+          )
+      );
+  }
+  final table = DataTable(
+    columns: const <DataColumn>[
+      DataColumn(
+        label: Text(
+          'Stunde',
+          style: TextStyle(fontStyle: FontStyle.italic),
+        ),
+      ),
+      DataColumn(
+        label: Text(
+          'Fach',
+          style: TextStyle(fontStyle: FontStyle.italic),
+        ),
+      ),
+      DataColumn(
+        label: Text(
+          'Lehrer',
+          style: TextStyle(fontStyle: FontStyle.italic),
+        ),
+      ),
+      DataColumn(
+        label: Text(
+          'Raum',
+          style: TextStyle(fontStyle: FontStyle.italic),
+        ),
+      ),
+    ],
+    rows: rows
+      
+    /* DataRow(
+          cells: <DataCell>[
+            DataCell(Text('1')),
+            DataCell(Text('Mathematik')),
+            DataCell(Text('SCHN')),
+            DataCell(Text('K2')),
+          ]
+      ),
+      DataRow(
+          cells: <DataCell>[
+            DataCell(Text('2')),
+            DataCell(Text('Mathematik')),
+            DataCell(Text('SCHN')),
+            DataCell(Text('K2')),
+          ]
+      ),
+  */
+   );
+
+  return table;
+}
+
+/*Widget _buildSchedule(List<dynamic> lessons) {
   final column = Column(children: [
     Text('${dayOfSchedule()}:',
         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold))
@@ -26,7 +108,7 @@ Widget _buildSchedule(List<dynamic> lessons) {
 
   return column;
 }
-
+*/
 late Future<Json> schedule;
 
 void initSchedule() {
@@ -44,7 +126,7 @@ Widget scheduleWidget() =>
             final List<dynamic> lessons = snapshot.data!['result'][0]['days']
                 [/*todayIndex()*/ 0]['lessons'];
 
-            return _widget = _buildSchedule(lessons);
+            return _widget = Center(child: _buildSchedule(lessons));
           } else if (snapshot.hasError) {
             return Text("Fehler: ${snapshot.error}",
                 style:
@@ -57,8 +139,8 @@ Widget scheduleWidget() =>
 Future<Json> _fetchSchedule() async {
   final response = await http.get(Uri.parse(
       //'http://loens2.com/maristenplaner/schedule/000000'
-      //'https://www.loens2.com/maristenplaner/schedule/000000'
-      'http://localhost:8000/schedule/000000'
+      'https://www.loens2.com/maristenplaner/schedule/000000'
+      //'http://localhost:8000/schedule/000000'
       //'http://192.168.178.61:8000/schedule/000000'
       //'http://84.164.234.82:25565/schedule/000000'
   ));
