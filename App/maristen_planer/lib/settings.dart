@@ -54,18 +54,32 @@ class BoolSetting extends Setting<bool> {
 }
 
 class StringSetting extends Setting<String> {
+  final TextEditingController controller;
+
   @override
   ListTile settingRow(BuildContext context) => ListTile(
     leading: icon,
-    title: TextField(),
-    trailing: const Icon(Icons.close),
+    title: TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: name,
+      ),
+      onEditingComplete: () {
+        _settingsState.setState(() {
+          value = controller.text;
+        });
+      },
+    ),
+    //trailing: const Icon(Icons.close),
   );
 
   StringSetting({
     required String name,
     required String value,
     required Icon icon,
-  }) : super(name, value, icon);
+  }) : controller = TextEditingController(text: value),
+        super(name, value, icon);
 }
 
 class EnumSetting<T> extends Setting<T> {
