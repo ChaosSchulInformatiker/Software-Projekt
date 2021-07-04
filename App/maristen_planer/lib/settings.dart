@@ -6,7 +6,8 @@ final List<SettingGroup> settings = [
     BoolSetting(name: 'Debug', value: true, icon: const Icon(Icons.bug_report)),
     BoolSetting(name: 'Debug2', value: true, icon: const Icon(Icons.bug_report)),
     EnumSetting(name: 'Enum', enumName: '_Hi', values: _Hi.values, value: _Hi.Hi, icon: const Icon(Icons.emoji_people)),
-    EnumSetting(name: 'Enum2', enumName: '_Hi', values: _Hi.values, value: _Hi.Bye, icon: const Icon(Icons.emoji_people))
+    EnumSetting(name: 'Enum2', enumName: '_Hi', values: _Hi.values, value: _Hi.Bye, icon: const Icon(Icons.emoji_people)),
+    StringSetting(name: 'String', value: 'S', icon: const Icon(Icons.emoji_people))
   ])
 ];
 enum _Hi { Hi, Hello, Bye }
@@ -48,6 +49,21 @@ class BoolSetting extends Setting<bool> {
   BoolSetting({
     required String name,
     required bool value,
+    required Icon icon,
+  }) : super(name, value, icon);
+}
+
+class StringSetting extends Setting<String> {
+  @override
+  ListTile settingRow(BuildContext context) => ListTile(
+    leading: icon,
+    title: TextField(),
+    trailing: const Icon(Icons.close),
+  );
+
+  StringSetting({
+    required String name,
+    required String value,
     required Icon icon,
   }) : super(name, value, icon);
 }
@@ -126,16 +142,6 @@ class _EnumSettingScreenState extends State<_EnumSettingScreen> {
 
   _EnumSettingScreenState(this.setting, this.title, this.values, this.value);
 }
-
-/*Widget _settingsWidget(SettingGroup group, BuildContext context) => ListView.builder(
-    padding: const EdgeInsets.all(10.0),
-    itemCount: group.settings.length * 2 - 1,
-    itemBuilder: (context, i) {
-      if (i.isOdd) return const Divider();
-      final index = i ~/ 2;
-      return group.settings[index].settingRow(context);
-    }
-);*/
 
 Widget settingsWidgets(BuildContext context) {
   final items = <ListTile>[];
