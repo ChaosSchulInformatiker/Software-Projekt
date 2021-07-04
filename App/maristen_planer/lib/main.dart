@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:maristen_planer/constants.dart';
+import 'package:maristen_planer/login.dart';
 import 'package:maristen_planer/settings.dart';
 import 'package:maristen_planer/utils.dart';
 import 'package:maristen_planer/widgets/schedule.dart';
 import 'package:maristen_planer/widgets/sidebar.dart';
 
 void main() {
-  runApp(app);
+  runApp(MaterialApp(
+    home: LoginScreen(),
+  ));
 }
 
 final MyApp app = MyApp();
