@@ -60,9 +60,7 @@ class _LoginScreenState  extends State<LoginScreen> {
             Container(
                 height: 50,
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                child: RaisedButton(
-                  textColor: Colors.white,
-                  color: maristenBlueLight,
+                child: ElevatedButton(
                   child: Text('Login'),
                   onPressed: () {
                     print(fNameController.text);
