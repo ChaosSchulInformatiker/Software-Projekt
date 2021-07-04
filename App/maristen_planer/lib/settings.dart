@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:maristen_planer/languages.dart';
 import 'package:maristen_planer/main.dart';
 import 'package:maristen_planer/widgets/sidebar.dart';
-
+import 'package:settings_ui/settings_ui.dart';
+/*
 final List<Setting> settings = [
   BoolSetting(name: 'Debug', value: true, icon: const Icon(Icons.terrain)),
   BoolSetting(name: 'Debug2', value: true, icon: const Icon(Icons.terrain))
@@ -67,4 +69,40 @@ final settingsState = _SettingsState();
 void openSettings() {
   // TODO
   print('Open Settings: TODO!');
+}
+*/
+
+class SettingsScreen extends StatefulWidget {
+  @override
+  _SettingsScreenState createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  bool lockInBackground = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Einstellungen'),),
+      body: SettingsList(
+        sections: [
+          SettingsSection(
+            title: 'Allgemein',
+            tiles: [
+              SettingsTile(
+                  title: 'Sprache',
+                  subtitle: 'Deutsch',
+                  leading: Icon(Icons.language),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => LanguagesScreen()
+                    ));
+                  },
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
 }

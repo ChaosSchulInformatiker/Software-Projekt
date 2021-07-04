@@ -13,6 +13,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  settings_ui: ^1.0.0
 
   http: 0.13.3
 

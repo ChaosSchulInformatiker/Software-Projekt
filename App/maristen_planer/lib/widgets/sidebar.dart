@@ -36,8 +36,7 @@ class SideDrawer extends StatelessWidget {
             leading: Icon(Icons.settings),
             title: Text('Einstellungen'),
             onTap: () {
-              Navigator.of(context).pop();
-              openSettings();
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsScreen()));
               },
           ),
           ListTile(
@@ -57,4 +56,5 @@ class SideDrawer extends StatelessWidget {
       ),
     );
   }
+
 }
