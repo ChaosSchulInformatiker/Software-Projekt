@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:maristen_planer/constants.dart';
 import 'package:maristen_planer/main.dart';
+import 'package:maristen_planer/requests.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -60,7 +62,7 @@ class _LoginScreenState  extends State<LoginScreen> {
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: RaisedButton(
                   textColor: Colors.white,
-                  color: Colors.blue,
+                  color: maristenBlueLight,
                   child: Text('Login'),
                   onPressed: () {
                     print(fNameController.text);
@@ -69,13 +71,11 @@ class _LoginScreenState  extends State<LoginScreen> {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) => MyApp()
                     ));
-
+                    registerRequest(fNameController.text, lNameController.text);
                   },
                 )),
           ],
-
         ),
-
       ),
     );
   }
