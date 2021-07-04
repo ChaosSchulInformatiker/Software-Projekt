@@ -64,7 +64,7 @@ class _LoginScreenState  extends State<LoginScreen> {
                   child: Text('Login'),
                   onPressed: () {
                     print(fNameController.text);
-                    String eMail = getEmailAccount(fNameController.text, lNameController.text);
+                    getEmailAccount(fNameController.text, lNameController.text);
                     print(eMail);
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) => MyApp()
@@ -78,6 +78,8 @@ class _LoginScreenState  extends State<LoginScreen> {
     );
   }
 }
+
+String eMail = '';
 
 String getEmailAccount(String fName, String lName) {
   final buffer = StringBuffer();
