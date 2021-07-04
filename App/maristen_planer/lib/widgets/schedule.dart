@@ -106,7 +106,7 @@ Widget scheduleWidget() =>
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final List<dynamic> lessons = snapshot.data!['result'][0]['days']
-                [/*todayIndex()*/ 0]['lessons'];
+                [scheduleTodayIndex()]['lessons'];
 
             return _widget = Center(child: _buildSchedule(lessons));
           } else if (snapshot.hasError) {

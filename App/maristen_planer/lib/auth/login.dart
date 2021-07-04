@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:maristen_planer/auth/authentification.dart';
-import 'package:maristen_planer/constants.dart';
-import 'package:maristen_planer/main.dart';
 import 'package:maristen_planer/requests.dart';
 
 class LoginScreen extends StatefulWidget {
