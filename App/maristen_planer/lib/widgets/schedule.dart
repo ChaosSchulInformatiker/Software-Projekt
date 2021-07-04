@@ -37,6 +37,7 @@ Widget _buildSchedule(List<dynamic> lessons) {
       );
   }
   final table = DataTable(
+    dataRowHeight: 40,
     columns: const <DataColumn>[
       DataColumn(
         label: Text(
@@ -64,24 +65,6 @@ Widget _buildSchedule(List<dynamic> lessons) {
       ),
     ],
     rows: rows
-      
-    /* DataRow(
-          cells: <DataCell>[
-            DataCell(Text('1')),
-            DataCell(Text('Mathematik')),
-            DataCell(Text('SCHN')),
-            DataCell(Text('K2')),
-          ]
-      ),
-      DataRow(
-          cells: <DataCell>[
-            DataCell(Text('2')),
-            DataCell(Text('Mathematik')),
-            DataCell(Text('SCHN')),
-            DataCell(Text('K2')),
-          ]
-      ),
-  */
    );
 
   return table;
