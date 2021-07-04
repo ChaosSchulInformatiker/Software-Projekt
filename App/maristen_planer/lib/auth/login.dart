@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maristen_planer/auth/authentification.dart';
 import 'package:maristen_planer/constants.dart';
 import 'package:maristen_planer/main.dart';
 import 'package:maristen_planer/requests.dart';
@@ -30,9 +31,9 @@ class _LoginScreenState  extends State<LoginScreen> {
               child: Text(
                 'MaristenPlaner Login',
                 style: TextStyle(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 30
+                  color: Colors.blue,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 30
                 ),
               ),
             ),
@@ -88,28 +89,26 @@ class _LoginScreenState  extends State<LoginScreen> {
               ),
             ),
             Container(
-                height: 50,
-                padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                child: ElevatedButton(
-                  child: Text('Login'),
-                  onPressed: () {
-                    print(fNameController.text);
-                    getEmailAccount(fNameController.text, lNameController.text);
-                    print(eMail);
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => MyApp()
-                    ));
-                    registerRequest(fNameController.text, lNameController.text);
-                  },
-                )),
+              height: 50,
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+              child: ElevatedButton(
+                child: Text('Login'),
+                onPressed: () {
+                  print(fNameController.text);
+                  //getEmailAccount(fNameController.text, lNameController.text);
+                  //print(eMail);
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => AuthentificationScreen(registerRequest(fNameController.text, lNameController.text))
+                  ));
+                },
+              )
+            ),
           ],
         ),
       ),
     );
   }
 }
-
-String eMail = '';
 
 String getEmailAccount(String fName, String lName) {
   final buffer = StringBuffer();
