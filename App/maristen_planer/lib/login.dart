@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maristen_planer/authentification.dart';
 import 'package:maristen_planer/main.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -64,10 +65,11 @@ class _LoginScreenState  extends State<LoginScreen> {
                   child: Text('Login'),
                   onPressed: () {
                     print(fNameController.text);
-                    String eMail = getEmailAccount(fNameController.text, lNameController.text);
+                    eMail = getEmailAccount(fNameController.text, lNameController.text);
+
                     print(eMail);
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => MyApp()
+                        builder: (BuildContext context) => AuthentificationScreen()
                     ));
 
                   },
@@ -80,6 +82,8 @@ class _LoginScreenState  extends State<LoginScreen> {
     );
   }
 }
+
+String eMail = '';
 
 String getEmailAccount(String fName, String lName) {
   final buffer = StringBuffer();
