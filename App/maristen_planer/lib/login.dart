@@ -9,13 +9,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState  extends State<LoginScreen> {
-  TextEditingController fNameController = TextEditingController();
-  TextEditingController lNameController = TextEditingController();
-  TextField eMailController = TextField();
+  final TextEditingController fNameController = TextEditingController();
+  final TextEditingController lNameController = TextEditingController();
+  final TextEditingController eMailController = TextEditingController();
+  bool editedEmail = false;
 
   @override
-
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -45,6 +44,15 @@ class _LoginScreenState  extends State<LoginScreen> {
                   border: OutlineInputBorder(),
                   labelText: 'Vorname',
                 ),
+                onChanged: (s) {
+                  if (!editedEmail) {
+                    eMailController.text = getEmailAccount(
+                        s, lNameController.text);
+                  } else if (eMailController.text == getEmailAccount(
+                      s, lNameController.text)) {
+                    editedEmail = false;
+                  }
+                },
               ),
             ),
             Container(
@@ -55,11 +63,33 @@ class _LoginScreenState  extends State<LoginScreen> {
                   border: OutlineInputBorder(),
                   labelText: 'Nachname',
                 ),
+                onChanged: (s) {
+                  if (!editedEmail) {
+                    eMailController.text = getEmailAccount(
+                        fNameController.text, s);
+                  } else if (eMailController.text == getEmailAccount(
+                      fNameController.text, s)) {
+                    editedEmail = false;
+                  }
+                },
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(10),
+              child: TextField(
+                controller: eMailController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Schul E-Mail',
+                ),
+                onChanged: (s) {
+                  editedEmail = true;
+                },
               ),
             ),
             Container(
                 height: 50,
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                 child: ElevatedButton(
                   child: Text('Login'),
                   onPressed: () {
