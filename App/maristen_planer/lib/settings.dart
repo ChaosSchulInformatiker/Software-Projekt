@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
-//import 'package:maristen_planer/languages.dart';
-//import 'package:maristen_planer/main.dart';
-//import 'package:maristen_planer/widgets/sidebar.dart';
-//import 'package:settings_ui/settings_ui.dart';
+import 'package:maristen_planer/constants.dart';
 
-final List<Setting> settings = [
-  BoolSetting(name: 'Debug', value: true, icon: const Icon(Icons.bug_report)),
-  BoolSetting(name: 'Debug2', value: true, icon: const Icon(Icons.bug_report)),
-  EnumSetting(name: 'Enum', enumName: '_Hi', values: _Hi.values, value: _Hi.Hi, icon: const Icon(Icons.emoji_people))
+final List<SettingGroup> settings = [
+  SettingGroup(title: 'Allgemein', settings: [
+    BoolSetting(name: 'Debug', value: true, icon: const Icon(Icons.bug_report)),
+    BoolSetting(name: 'Debug2', value: true, icon: const Icon(Icons.bug_report)),
+    EnumSetting(name: 'Enum', enumName: '_Hi', values: _Hi.values, value: _Hi.Hi, icon: const Icon(Icons.emoji_people)),
+    EnumSetting(name: 'Enum2', enumName: '_Hi', values: _Hi.values, value: _Hi.Bye, icon: const Icon(Icons.emoji_people))
+  ])
 ];
 enum _Hi { Hi, Hello, Bye }
+
+class SettingGroup {
+  final String title;
+  final List<Setting> settings;
+  bool visible = true;
+
+  SettingGroup({
+    required this.title,
+    required this.settings
+  });
+}
 
 abstract class Setting<T> {
   final Icon icon;
@@ -17,14 +28,14 @@ abstract class Setting<T> {
   final String name;
   T value;
 
-  Widget settingRow(BuildContext context);
+  ListTile settingRow(BuildContext context);
 
   Setting(this.name, this.value, this.icon);
 }
 
 class BoolSetting extends Setting<bool> {
   @override
-  Widget settingRow(BuildContext context) => ListTile(
+  ListTile settingRow(BuildContext context) => ListTile(
     leading: icon,
     title: Text(name),
     trailing: Switch(value: value, onChanged: (newValue) {
@@ -47,10 +58,10 @@ class EnumSetting<T> extends Setting<T> {
   final List<T> values;
 
   @override
-  Widget settingRow(BuildContext context) => ListTile(
+  ListTile settingRow(BuildContext context) => ListTile(
     leading: icon,
     title: Text(name),
-    trailing: const Icon(Icons.arrow_forward_ios_rounded),
+    trailing: Icon(Icons.navigate_next),
     onTap: () {
       Navigator.push(context, MaterialPageRoute(builder: (context) => _EnumSettingScreen(this, name, enumName, _enLength, values, value)));
     },
@@ -61,7 +72,7 @@ class EnumSetting<T> extends Setting<T> {
     required this.enumName,
     required this.values,
     required T value,
-    required Icon icon,
+    required Icon icon
   }) : _enLength = enumName.length + 1, super(name, value, icon);
 }
 
@@ -93,7 +104,7 @@ class _EnumSettingScreenState extends State<_EnumSettingScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
       body: ListView.builder(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(10.0),
         itemCount: values.length * 2 - 1,
         itemBuilder: (context, i) {
           if (i.isOdd) return const Divider();
@@ -116,14 +127,43 @@ class _EnumSettingScreenState extends State<_EnumSettingScreen> {
   _EnumSettingScreenState(this.setting, this.title, this.values, this.value);
 }
 
-Widget settingsWidget(BuildContext context) => ListView.builder(
-    padding: const EdgeInsets.all(16.0),
-    itemCount: settings.length * 2 - 1,
+/*Widget _settingsWidget(SettingGroup group, BuildContext context) => ListView.builder(
+    padding: const EdgeInsets.all(10.0),
+    itemCount: group.settings.length * 2 - 1,
     itemBuilder: (context, i) {
       if (i.isOdd) return const Divider();
       final index = i ~/ 2;
-      return settings[index].settingRow(context);
-    });
+      return group.settings[index].settingRow(context);
+    }
+);*/
+
+Widget settingsWidgets(BuildContext context) {
+  final items = <ListTile>[];
+  for (var group in settings) {
+    items.add(ListTile(
+      title: Text(group.title, style: TextStyle(color: maristenBlueLight, fontWeight: FontWeight.bold)),
+      leading: Icon(group.visible ? Icons.expand_less : Icons.expand_more),
+      onTap: () {
+        _settingsState.setState(() {
+          group.visible = !group.visible;
+        });
+      },
+    ));
+    if (group.visible) {
+      for (var setting in group.settings) {
+        items.add(setting.settingRow(context));
+      }
+    }
+  }
+  return ListView.builder(
+      itemCount: items.length * 2 - 1,
+      itemBuilder: (context, i) {
+        if (i.isOdd) return const Divider();
+        final index = i ~/ 2;
+        return items[index];
+      }
+  );
+}
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -139,7 +179,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Einstellungen'),),
-      body: settingsWidget(context)
+      body: settingsWidgets(context)
     );
   }
 }
