@@ -18,6 +18,11 @@ class _VerificationScreenState extends State<VerificationScreen> {
     switch (status) {
       case "SUCCESS":
         print(id);
+        WidgetsBinding.instance?.addPostFrameCallback((_) =>
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) => MyApp()
+            ))
+        );
         return Text('Login erfolgreich! Sie werden in Kürze weitergeleitet.');
       case "WRONG_CODE":
         return Text('Der Code war falsch! Bitte versuchen Sie es noch einmal.');
@@ -55,15 +60,6 @@ class _VerificationScreenState extends State<VerificationScreen> {
           },
         )
     );
-  }
-
-  @override
-  initState() {
-    super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) =>
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (BuildContext context) => MyApp()
-    )));
   }
 
   _VerificationScreenState(this.response);
