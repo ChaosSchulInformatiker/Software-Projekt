@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maristen_planer/constants.dart';
 
 import '../settings.dart';
 
@@ -29,7 +30,7 @@ class SideDrawer extends StatelessWidget {
                   style: TextStyle(color: Colors.white, fontSize: 25),
                 )),
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: maristenBlue,
             ),
           ),
           ListTile(

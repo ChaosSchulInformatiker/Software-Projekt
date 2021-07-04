@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:maristen_planer/authentification.dart';
+import 'package:maristen_planer/constants.dart';
 import 'package:maristen_planer/main.dart';
+import 'package:maristen_planer/requests.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -59,31 +60,24 @@ class _LoginScreenState  extends State<LoginScreen> {
             Container(
                 height: 50,
                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                child: RaisedButton(
-                  textColor: Colors.white,
-                  color: Colors.blue,
+                child: ElevatedButton(
                   child: Text('Login'),
                   onPressed: () {
                     print(fNameController.text);
-                    eMail = getEmailAccount(fNameController.text, lNameController.text);
-
+                    String eMail = getEmailAccount(fNameController.text, lNameController.text);
                     print(eMail);
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => AuthentificationScreen()
+                        builder: (BuildContext context) => MyApp()
                     ));
-
+                    registerRequest(fNameController.text, lNameController.text);
                   },
                 )),
           ],
-
         ),
-
       ),
     );
   }
 }
-
-String eMail = '';
 
 String getEmailAccount(String fName, String lName) {
   final buffer = StringBuffer();
