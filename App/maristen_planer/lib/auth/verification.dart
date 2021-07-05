@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:maristen_planer/constants.dart';
 import '../main.dart';
 import '../utils.dart';
 
@@ -23,11 +26,20 @@ class _VerificationScreenState extends State<VerificationScreen> {
                 builder: (BuildContext context) => MyApp()
             ))
         );
-        return Text('Login erfolgreich! Sie werden in Kürze weitergeleitet.');
+        return Text(
+            'Login erfolgreich! Sie werden in Kürze weitergeleitet.',
+
+        );
       case "WRONG_CODE":
-        return Text('Der Code war falsch! Bitte versuchen Sie es noch einmal.');
+        return Text(
+            'Der Code war falsch! Bitte versuchen Sie es noch einmal.',
+
+        );
       case "WRONG_EMAIL":
-        return Text('Falsche E-Mail.');
+        return Text(
+            'Falsche E-Mail.',
+
+        );
     }
     return Text('...');
   }
@@ -35,20 +47,28 @@ class _VerificationScreenState extends State<VerificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: FutureBuilder<Json>(
+
+        body: Center(
+        child: FutureBuilder<Json>(
           future: response,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final Json result = snapshot.data!['result'][0];
-              return Center(
-                child: Column(
-                  children: <Widget>[
-                    _body(result['status'], result['first_name'], result['last_name'], result['id']),
-                    ElevatedButton(onPressed: () {
-                      Navigator.pop(context);
-                    }, child: Text('Zurück'))
-                  ]
-                )
+              return Scaffold(
+                  appBar: AppBar(
+                    title: Text('Info'),
+                    backgroundColor: maristenBlue,
+                  ),
+                  body: Center(
+                    child: Column(
+                      children: <Widget>[
+                        _body(result['status'], result['first_name'], result['last_name'], result['id']),
+                        ElevatedButton(onPressed: () {
+                          Navigator.pop(context);
+                        }, child: Text('Zurück'))
+                      ]
+                  )
+              )
               );
             } else if (snapshot.hasError) {
               return Text("Fehler: ${snapshot.error}",
@@ -58,6 +78,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
 
             return Center(child: CircularProgressIndicator());
           },
+        )
         )
     );
   }

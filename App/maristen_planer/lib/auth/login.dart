@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maristen_planer/auth/authentification.dart';
+import 'package:maristen_planer/constants.dart';
 import 'package:maristen_planer/requests.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -18,6 +19,7 @@ class _LoginScreenState  extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('MaristenPlaner'),
+        backgroundColor: maristenBlue,
       ),
       body: Padding(
         padding: EdgeInsets.all(10),
@@ -29,7 +31,7 @@ class _LoginScreenState  extends State<LoginScreen> {
               child: Text(
                 'MaristenPlaner Login',
                 style: TextStyle(
-                  color: Colors.blue,
+                  color: maristenBlue,
                   fontWeight: FontWeight.w500,
                   fontSize: 30
                 ),
@@ -38,6 +40,7 @@ class _LoginScreenState  extends State<LoginScreen> {
             Container(
               padding: EdgeInsets.all(10),
               child: TextField(
+                style: TextStyle(color: maristenBlue),
                 controller: fNameController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -57,6 +60,7 @@ class _LoginScreenState  extends State<LoginScreen> {
             Container(
               padding: EdgeInsets.all(10),
               child: TextField(
+                style: TextStyle(color: maristenBlue),
                 controller: lNameController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -76,6 +80,7 @@ class _LoginScreenState  extends State<LoginScreen> {
             Container(
               padding: EdgeInsets.all(10),
               child: TextField(
+                style: TextStyle(color: maristenBlue),
                 controller: eMailController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -90,6 +95,7 @@ class _LoginScreenState  extends State<LoginScreen> {
               height: 50,
               padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
               child: ElevatedButton(
+                style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(maristenBlue)),
                 child: Text('Login'),
                 onPressed: () {
                   print(fNameController.text);

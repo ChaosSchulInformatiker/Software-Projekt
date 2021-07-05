@@ -7,6 +7,9 @@ import 'package:maristen_planer/widgets/sidebar.dart';
 
 void main() {
   runApp(MaterialApp(
+    theme:ThemeData(
+      primaryColor: maristenBlue,
+    ),
     home: LoginScreen(),
   ));
 }
@@ -92,7 +95,7 @@ class _MyAppState extends State<MyApp> {
               ),
             ],
             currentIndex: _selectedIndex,
-            selectedItemColor: Colors.blue,
+            selectedItemColor: maristenBlue,
             onTap: _onItemTapped,
           ),
         ),
