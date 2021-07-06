@@ -25,6 +25,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  flutter_launcher_icons: ^0.7.4
+
 
 # The following section is specific to Flutter.
 flutter:
@@ -33,3 +35,11 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - "assets/icon.png"
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon.png"

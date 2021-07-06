@@ -88,19 +88,22 @@ Widget scheduleWidget(State state) =>
             final List<dynamic> lessons = snapshot.data!['result'][0]['days']
                 [scheduleTodayIndex()]['lessons'];
 
-            return _widget = RefreshIndicator(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Center(child: _buildSchedule(lessons)),
-                physics: const AlwaysScrollableScrollPhysics(),
-              ),
-              onRefresh: () async {
-                await (schedule = fetchSchedule());
-                state.setState(() {
-                  _widget = null;
-                });
-              },
-            );
+            return _widget =
+              RefreshIndicator(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Center(child: _buildSchedule(lessons)),
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  clipBehavior: Clip.hardEdge,
+                ),
+                onRefresh: () async {
+                  await (schedule = fetchSchedule());
+                  state.setState(() {
+                    _widget = null;
+                  });
+                },
+              )
+            ;
           } else if (snapshot.hasError) {
             return Text("Fehler: ${snapshot.error}",
                 style:
