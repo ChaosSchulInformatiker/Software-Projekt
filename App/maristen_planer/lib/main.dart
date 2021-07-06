@@ -7,10 +7,9 @@ import 'package:maristen_planer/widgets/sidebar.dart';
 
 void main() {
   runApp(MaterialApp(
-    theme:ThemeData(
-      primaryColor: maristenBlue,
-    ),
-    home: LoginScreen(),
+    theme: lightTheme,
+    darkTheme: darkTheme,
+    home: MyApp(),
   ));
 }
 
@@ -42,7 +41,7 @@ class _MyAppState extends State<MyApp> {
   Widget _body() {
     switch (_selectedIndex) {
       case 0:
-        return scheduleWidget();
+        return scheduleWidget(this);
     }
     return Text('Not implemented yet', style: TextStyle(color: Colors.amber));
   }
