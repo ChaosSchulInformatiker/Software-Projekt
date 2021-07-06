@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:maristen_planer/utils.dart';
 
@@ -17,8 +19,8 @@ Widget _buildSchedule(List<dynamic> lessons) {
               cells: <DataCell>[
                 DataCell(Text(li)),
                 DataCell(Text('-')),
-                DataCell(Text('')),
-                DataCell(Text('')),
+                DataCell(Text('-')),
+                DataCell(Text('-')),
               ]
           )
       );
@@ -69,28 +71,6 @@ Widget _buildSchedule(List<dynamic> lessons) {
   return table;
 }
 
-/*Widget _buildSchedule(List<dynamic> lessons) {
-  final column = Column(children: [
-    Text('${dayOfSchedule()}:',
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold))
-  ]);
-
-  if (lessons.isEmpty) {
-    column.children.add(Text('Kein Unterricht heute'));
-    return column;
-  }
-
-  for (Json? lesson in lessons) {
-    if (lesson == null)
-      column.children.add(Text('-'));
-    else
-      column.children
-          .add(Text('${lesson['subject']} bei ${lesson['teacher']}'));
-  }
-
-  return column;
-}
-*/
 late Future<Json> schedule;
 
 void initSchedule() {
@@ -99,16 +79,28 @@ void initSchedule() {
 
 Widget? _widget;
 
-Widget scheduleWidget() =>
+Widget scheduleWidget(State state) =>
     _widget ??
     FutureBuilder<Json>(
         future: schedule,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final List<dynamic> lessons = snapshot.data!['result'][0]['days']
-                [/*todayIndex()*/ 0]['lessons'];
+                [scheduleTodayIndex()]['lessons'];
 
-            return _widget = Center(child: _buildSchedule(lessons));
+            return _widget = RefreshIndicator(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Center(child: _buildSchedule(lessons)),
+                physics: const AlwaysScrollableScrollPhysics(),
+              ),
+              onRefresh: () async {
+                await (schedule = fetchSchedule());
+                state.setState(() {
+                  _widget = null;
+                });
+              },
+            );
           } else if (snapshot.hasError) {
             return Text("Fehler: ${snapshot.error}",
                 style:
@@ -116,4 +108,5 @@ Widget scheduleWidget() =>
           }
 
           return CircularProgressIndicator();
-        });
+        }
+    );

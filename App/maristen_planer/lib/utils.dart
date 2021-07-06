@@ -1,5 +1,11 @@
 int todayIndex() => DateTime.now().weekday;
 
+int scheduleTodayIndex() {
+  int ti = todayIndex();
+  if (ti >= DateTime.saturday) return 0;
+  return ti;
+}
+
 String dayOfSchedule() {
   switch (todayIndex()) {
     case DateTime.monday:

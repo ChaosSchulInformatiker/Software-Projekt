@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:maristen_planer/constants.dart';
-import 'package:maristen_planer/login.dart';
+import 'package:maristen_planer/auth/login.dart';
 import 'package:maristen_planer/utils.dart';
 import 'package:maristen_planer/widgets/schedule.dart';
 import 'package:maristen_planer/widgets/sidebar.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: LoginScreen(),
+    theme: lightTheme,
+    darkTheme: darkTheme,
+    home: MyApp(),
   ));
 }
 
@@ -39,7 +41,7 @@ class _MyAppState extends State<MyApp> {
   Widget _body() {
     switch (_selectedIndex) {
       case 0:
-        return scheduleWidget();
+        return scheduleWidget(this);
     }
     return Text('Not implemented yet', style: TextStyle(color: Colors.amber));
   }
@@ -92,7 +94,7 @@ class _MyAppState extends State<MyApp> {
               ),
             ],
             currentIndex: _selectedIndex,
-            selectedItemColor: Colors.blue,
+            selectedItemColor: maristenBlue,
             onTap: _onItemTapped,
           ),
         ),
