@@ -27,6 +27,12 @@ public class Mail {
         });
 
         //session.setDebug(true);
+        String htmlMessage =
+                "<span style=\"text-align: center; background-color: white;\">" +
+                "<h1>Hallo "+firstName+",</h1>" +
+                "<div style=\"background-color=#FF68AA; margin=\"3px\"; border-radius=\"3px\";\"><p>Ihr Code lautet :</p><p>"+code+"</p</div>" +
+                "<p>Mit freundlichen Grüßen,<br/>Ihr Maristenplaner Team.</p>" +
+                "</span>";
 
         //try {
         MimeMessage message = new MimeMessage(session);
@@ -35,7 +41,7 @@ public class Mail {
         System.out.println("sent "+receiver);
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
         message.setSubject("Bestätigungscode");
-        message.setText("Hallo "+firstName+",\n\nDein Code lautet: "+code+"\n\nMit freundlichen Grüßen,\n\nIhr Maristenplaner-Team");
+        message.setContent(htmlMessage, "text/html; charset=utf-8");
         Transport.send(message);
         // catch (MessagingException mex) {
         //   mex.printStackTrace();
