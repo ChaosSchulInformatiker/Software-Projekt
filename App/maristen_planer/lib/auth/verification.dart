@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:maristen_planer/constants.dart';
+import 'package:maristen_planer/properties.dart';
 import '../main.dart';
 import '../utils.dart';
 
@@ -21,27 +22,28 @@ class _VerificationScreenState extends State<VerificationScreen> {
     switch (status) {
       case "SUCCESS":
         print(id);
-        WidgetsBinding.instance?.addPostFrameCallback((_) =>
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context) => MyApp()
-            ))
-        );
-        return Text(
-            'Login erfolgreich! Sie werden in Kürze weitergeleitet.',
-
-        );
+        saveAccountId(id!);
+        WidgetsBinding.instance?.addPostFrameCallback((_) => _proceedToHome());
+        return Column(children: <Widget>[
+          Text('Login erfolgreich! Sie werden in Kürze weitergeleitet.',),
+          Text('Alternativ drücken Sie bitte diesen Button:'),
+          ElevatedButton(
+            child: Text('Weiter'),
+            onPressed: _proceedToHome
+          )
+        ]);
       case "WRONG_CODE":
-        return Text(
-            'Der Code war falsch! Bitte versuchen Sie es noch einmal.',
-
-        );
+        return Text('Der Code war falsch! Bitte versuchen Sie es noch einmal.');
       case "WRONG_EMAIL":
-        return Text(
-            'Falsche E-Mail.',
-
-        );
+        return Text('Falsche E-Mail.');
     }
     return Text('...');
+  }
+
+  void _proceedToHome() {
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+        builder: (BuildContext context) => MyApp()
+    ), (route) => false);
   }
 
   @override
