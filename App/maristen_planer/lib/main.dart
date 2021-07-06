@@ -7,7 +7,8 @@ import 'package:maristen_planer/utils.dart';
 import 'package:maristen_planer/widgets/schedule.dart';
 import 'package:maristen_planer/widgets/sidebar.dart';
 
-void main() async {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   settings.length; // Load settings
   int id = await getAccountId();
   runApp(MaterialApp(
