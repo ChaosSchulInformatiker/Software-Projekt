@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:maristen_planer/auth/login.dart';
 import 'package:maristen_planer/constants.dart';
+import 'package:maristen_planer/properties.dart';
+import 'package:maristen_planer/settings.dart';
 import 'package:maristen_planer/utils.dart';
 import 'package:maristen_planer/widgets/schedule.dart';
 import 'package:maristen_planer/widgets/sidebar.dart';
 
-import 'loading_screen.dart';
-
-void main() {
+void main() async {
+  settings.length; // Load settings
+  int id = await getAccountId();
   runApp(MaterialApp(
     theme: lightTheme,
     darkTheme: darkTheme,
-    home: LoadingScreen(),
+    home: id == -1 ? LoginScreen() : MyApp(),
   ));
 }
 

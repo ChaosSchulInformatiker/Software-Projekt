@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:maristen_planer/constants.dart';
+import 'package:maristen_planer/properties.dart';
 
 final List<SettingGroup> settings = [
   SettingGroup(title: 'Allgemein', settings: [
     BoolSetting(name: 'Debug', value: true, icon: const Icon(Icons.bug_report)),
     BoolSetting(name: 'Debug2', value: true, icon: const Icon(Icons.bug_report)),
+    VoidSetting(name: 'Clear cache', action: clearCache)
+  ]),
+  SettingGroup(title: 'Special', settings: [
     EnumSetting(name: 'Enum', enumName: '_Hi', values: _Hi.values, value: _Hi.Hi, icon: const Icon(Icons.emoji_people)),
     EnumSetting(name: 'Enum2', enumName: '_Hi', values: _Hi.values, value: _Hi.Bye, icon: const Icon(Icons.emoji_people)),
     StringSetting(name: 'String', value: 'S', icon: const Icon(Icons.emoji_people))
@@ -24,14 +28,23 @@ class SettingGroup {
 }
 
 abstract class Setting<T> {
-  final Icon icon;
+  final Icon? icon;
 
   final String name;
-  T value;
+  T _value;
+  bool _loadedValue = false;
+  
+  Future<T> getValue();
+  Future<void> setValue(T t);
 
   ListTile settingRow(BuildContext context);
-
-  Setting(this.name, this.value, this.icon);
+  
+  Setting(this.name, this._value, this.icon) {
+    getValue().then((value) {
+      _value = value;
+      print("Setting '$name' = $value");
+    });
+  }
 }
 
 class BoolSetting extends Setting<bool> {
@@ -39,9 +52,9 @@ class BoolSetting extends Setting<bool> {
   ListTile settingRow(BuildContext context) => ListTile(
     leading: icon,
     title: Text(name),
-    trailing: Switch(value: value, onChanged: (newValue) {
+    trailing: Switch(value: _value, onChanged: (newValue) {
       _settingsState.setState(() {
-        value = newValue;
+        setValue(newValue);
       });
     }),
   );
@@ -49,26 +62,65 @@ class BoolSetting extends Setting<bool> {
   BoolSetting({
     required String name,
     required bool value,
-    required Icon icon,
+    Icon? icon,
   }) : super(name, value, icon);
+
+  @override
+  Future<bool> getValue() async {
+    if (_loadedValue) return _value;
+    _value = (await getBoolSetting(name)) ?? _value;
+    _loadedValue = true;
+    return _value;
+  }
+
+  @override
+  Future<void> setValue(bool t) async {
+    _value = t;
+    await setBoolSetting(name, t);
+  }
 }
 
-class StringSetting extends Setting<String> {
-  final TextEditingController controller;
+class VoidSetting extends Setting<void> {
+  final Future<void> Function() action;
+
+  @override
+  Future<void> getValue() async {}
+
+  @override
+  Future<void> setValue(void t) async {
+    action();
+  }
 
   @override
   ListTile settingRow(BuildContext context) => ListTile(
     leading: icon,
+    title: ElevatedButton(
+      child: Text(name),
+      onPressed: () => _settingsState.setState(() {
+        setValue(null);
+      })
+    )
+  );
+
+  VoidSetting({
+    required String name,
+    Icon? icon,
+    required this.action
+  }) : super(name, null, icon);
+}
+
+class StringSetting extends Setting<String> {
+  @override
+  ListTile settingRow(BuildContext context) => ListTile(
+    leading: icon,
     title: TextField(
-      controller: controller,
+      controller: TextEditingController(text: _value),
       decoration: InputDecoration(
         border: OutlineInputBorder(),
         labelText: name,
       ),
-      onEditingComplete: () {
-        _settingsState.setState(() {
-          value = controller.text;
-        });
+      onChanged: (t) {
+        setValue(t);
       },
     ),
     //trailing: const Icon(Icons.close),
@@ -77,9 +129,22 @@ class StringSetting extends Setting<String> {
   StringSetting({
     required String name,
     required String value,
-    required Icon icon,
-  }) : controller = TextEditingController(text: value),
-        super(name, value, icon);
+    Icon? icon,
+  }) : super(name, value, icon);
+
+  @override
+  Future<String> getValue() async {
+    if (_loadedValue) return _value;
+    _value = (await getStringSetting(name)) ?? _value;
+    _loadedValue = true;
+    return _value;
+  }
+
+  @override
+  Future<void> setValue(String t) async {
+    _value = t;
+    await setStringSetting(name, t);
+  }
 }
 
 class EnumSetting<T> extends Setting<T> {
@@ -93,7 +158,7 @@ class EnumSetting<T> extends Setting<T> {
     title: Text(name),
     trailing: Icon(Icons.navigate_next),
     onTap: () {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => _EnumSettingScreen(this, name, enumName, _enLength, values, value)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => _EnumSettingScreen(this, name, enumName, _enLength, values, _value)));
     },
   );
 
@@ -102,8 +167,30 @@ class EnumSetting<T> extends Setting<T> {
     required this.enumName,
     required this.values,
     required T value,
-    required Icon icon
+    Icon? icon
   }) : _enLength = enumName.length + 1, super(name, value, icon);
+
+  @override
+  Future<T> getValue() async {
+    if (_loadedValue) return _value;
+    var s = await getStringSetting(name);
+    if (s != null) {
+      for (var v in values) {
+        if (v.toString() == s) {
+          _value = v;
+          break;
+        }
+      }
+    }
+    _loadedValue = true;
+    return _value;
+  }
+
+  @override
+  Future<void> setValue(T t) async {
+    _value = t;
+    await setStringSetting(name, t.toString());
+  }
 }
 
 class _EnumSettingScreen<T> extends StatefulWidget {
@@ -145,7 +232,7 @@ class _EnumSettingScreenState extends State<_EnumSettingScreen> {
             onTap: () {
               setState(() {
                 value = values[index];
-                setting.value = setting.values[index];
+                setting.setValue(setting.values[index]);
               });
               //Navigator.pop(context);
             },
@@ -158,9 +245,14 @@ class _EnumSettingScreenState extends State<_EnumSettingScreen> {
 }
 
 Widget settingsWidgets(BuildContext context) {
-  final items = <ListTile>[];
+  final items = <Widget>[];
+  int gi = 0;
   for (var group in settings) {
+    if (gi > 0) items.add(const Divider(thickness: 4.0, height: 30.0));
     items.add(ListTile(
+      //dense: true,
+      //minVerticalPadding: 0,
+      //contentPadding: EdgeInsets.fromLTRB(16, -4, 16, -12),
       title: Text(group.title, style: TextStyle(color: maristenBlueLight, fontWeight: FontWeight.bold)),
       leading: Icon(group.visible ? Icons.expand_less : Icons.expand_more),
       onTap: () {
@@ -171,16 +263,18 @@ Widget settingsWidgets(BuildContext context) {
     ));
     if (group.visible) {
       for (var setting in group.settings) {
+        items.add(const Divider(thickness: 0.0));
         items.add(setting.settingRow(context));
       }
     }
+    ++gi;
   }
   return ListView.builder(
-      itemCount: items.length * 2 - 1,
+      itemCount: items.length,// * 2 - 1,
       itemBuilder: (context, i) {
-        if (i.isOdd) return const Divider();
-        final index = i ~/ 2;
-        return items[index];
+        //if (i.isOdd) return const Divider();
+        //final index = i ~/ 2;
+        return items[i];
       }
   );
 }
