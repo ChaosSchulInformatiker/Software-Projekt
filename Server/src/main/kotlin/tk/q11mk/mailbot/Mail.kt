@@ -24,7 +24,7 @@ object Mail {
         @Language("html") val htmlMessage =
             "<span style=\"text-align: center; background-color: white; width: 20%; font-size: large;\">" +
                     "<h1>Hallo " + firstName + ",</h1>" +
-                    "<div style=\"background-color: #118BE6; margin: auto; margin-top: 50px; margin-bottom: 50px; border-radius: 10px; padding: 20px; width: 15%; color: white;\"><p>Ihr Code lautet :</p><p style=\"font-weight: bold; font-size: xl-large;\">" + code + "</p></div>" +
+                    "<div style=\"background-color: #118BE6; margin: auto; margin-top: 50px; margin-bottom: 50px; border-radius: 10px; padding: 20px; width: 200px; color: white;\"><p>Ihr Code lautet :</p><p style=\"font-weight: bold; font-size: xl-large;\">" + code + "</p></div>" +
                     "<p>Mit freundlichen Grüßen,<br/>Ihr Maristenplaner Team.</p>" +
                     "</span>"
 
