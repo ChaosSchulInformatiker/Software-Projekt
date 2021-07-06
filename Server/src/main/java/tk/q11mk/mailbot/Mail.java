@@ -1,5 +1,7 @@
 package tk.q11mk.mailbot;
 
+import org.intellij.lang.annotations.Language;
+
 import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -27,10 +29,10 @@ public class Mail {
         });
 
         //session.setDebug(true);
-        String htmlMessage =
-                "<span style=\"text-align: center; background-color: white;\">" +
+        @Language("html") String htmlMessage =
+                "<span style=\"text-align: center; background-color: white; width: 20%; font-size: large;\">" +
                 "<h1>Hallo "+firstName+",</h1>" +
-                "<div style=\"background-color=#FF68AA; margin=\"3px\"; border-radius=\"3px\";\"><p>Ihr Code lautet :</p><p>"+code+"</p</div>" +
+                "<div style=\"background-color: #0D68AA; margin: auto; margin-top: 50px; margin-bottom: 50px; border-radius: 10px; padding: 20px; width: 15%; color: white;\"><p>Ihr Code lautet :</p><p style=\"font-weight: bold; font-size: xl-large;\">"+code+"</p></div>" +
                 "<p>Mit freundlichen Grüßen,<br/>Ihr Maristenplaner Team.</p>" +
                 "</span>";
 
