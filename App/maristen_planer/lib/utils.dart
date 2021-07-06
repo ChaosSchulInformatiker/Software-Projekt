@@ -3,7 +3,7 @@ int todayIndex() => DateTime.now().weekday;
 int scheduleTodayIndex() {
   int ti = todayIndex();
   if (ti >= DateTime.saturday) return 0;
-  return ti;
+  return ti - 1;
 }
 
 String dayOfSchedule() {
