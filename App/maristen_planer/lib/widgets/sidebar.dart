@@ -49,7 +49,7 @@ class SideDrawer extends StatelessWidget {
             icon: const Icon(Icons.info),
             applicationIcon: const FlutterLogo(),
             applicationName: 'MaristenPlaner',
-            applicationVersion: 'Dev Build June 2021',
+            applicationVersion: 'Dev Build July 2021',
             applicationLegalese: '\u{a9} 2021 MaristenPlaner Team',
             aboutBoxChildren: aboutBoxChildren,
           ),
