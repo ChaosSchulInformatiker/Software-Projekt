@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:maristen_planer/settings.dart';
+
 int todayIndex() => DateTime.now().weekday;
 
 int scheduleTodayIndex() {
@@ -21,3 +24,11 @@ String dayOfSchedule() {
 }
 
 typedef Json = Map<String, dynamic>;
+
+ThemeMode themeDataOfMode(ThemeSelection mode) {
+  switch (mode) {
+    case ThemeSelection.System: return ThemeMode.system;
+    case ThemeSelection.Light: return ThemeMode.light;
+    case ThemeSelection.Dark: return ThemeMode.dark;
+  }
+}

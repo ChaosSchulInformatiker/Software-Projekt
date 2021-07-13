@@ -31,7 +31,7 @@ class _LoginScreenState  extends State<LoginScreen> {
               child: Text(
                 'MaristenPlaner Login',
                 style: TextStyle(
-                  color: maristenBlue,
+                  color: maristenBlueLight,
                   fontWeight: FontWeight.w500,
                   fontSize: 30
                 ),
@@ -40,7 +40,6 @@ class _LoginScreenState  extends State<LoginScreen> {
             Container(
               padding: EdgeInsets.all(10),
               child: TextField(
-                style: TextStyle(color: maristenBlue),
                 controller: fNameController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -60,7 +59,6 @@ class _LoginScreenState  extends State<LoginScreen> {
             Container(
               padding: EdgeInsets.all(10),
               child: TextField(
-                style: TextStyle(color: maristenBlue),
                 controller: lNameController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -80,7 +78,6 @@ class _LoginScreenState  extends State<LoginScreen> {
             Container(
               padding: EdgeInsets.all(10),
               child: TextField(
-                style: TextStyle(color: maristenBlue),
                 controller: eMailController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -95,7 +92,7 @@ class _LoginScreenState  extends State<LoginScreen> {
               height: 50,
               padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
               child: ElevatedButton(
-                style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(maristenBlue)),
+                style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(maristenBlueLight)),
                 child: Text('Login'),
                 onPressed: () {
                   print(fNameController.text);

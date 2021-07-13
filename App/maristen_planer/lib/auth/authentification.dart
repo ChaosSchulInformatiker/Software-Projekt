@@ -3,7 +3,6 @@ import 'package:maristen_planer/requests.dart';
 import 'package:maristen_planer/constants.dart';
 
 import 'package:flutter/material.dart';
-import '../main.dart';
 import '../utils.dart';
 
 class AuthentificationScreen extends StatefulWidget {
@@ -34,7 +33,6 @@ class _AuthentificationScreenState extends State<AuthentificationScreen> {
         Container(
           padding: EdgeInsets.fromLTRB(10, 15, 10, 10),
           child: TextField(
-            style: TextStyle(color: maristenBlue),
             autofocus: true,
             keyboardType: TextInputType.number,
             textAlign: TextAlign.center,
@@ -56,7 +54,7 @@ class _AuthentificationScreenState extends State<AuthentificationScreen> {
             height: 50,
             padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
             child: ElevatedButton(
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(maristenBlue)),
+              style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(maristenBlueLight)),
               child: Text('Verifizieren'),
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(

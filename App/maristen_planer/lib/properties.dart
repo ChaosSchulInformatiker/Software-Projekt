@@ -30,7 +30,7 @@ Future<String?> getStringSetting(String id) async {
   return prefs.getString('settings.$id');
 }
 
-Future<void> clearCache() async {
+Future<void> resetData() async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.clear();
 }

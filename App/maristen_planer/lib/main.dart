@@ -11,9 +11,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   settings.length; // Load settings
   int id = await getAccountId();
+  final themeMode = themeDataOfMode(await settings[0].settings[0].getValue());
   runApp(MaterialApp(
-    theme: lightTheme,
+    theme: darkTheme,
     darkTheme: darkTheme,
+    themeMode: themeMode,
     home: id == -1 ? LoginScreen() : MyApp(),
   ));
 }

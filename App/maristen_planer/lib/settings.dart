@@ -3,18 +3,26 @@ import 'package:maristen_planer/constants.dart';
 import 'package:maristen_planer/properties.dart';
 
 final List<SettingGroup> settings = [
-  SettingGroup(title: 'Allgemein', settings: [
-    BoolSetting(name: 'Debug', value: true, icon: const Icon(Icons.bug_report)),
-    BoolSetting(name: 'Debug2', value: true, icon: const Icon(Icons.bug_report)),
-    VoidSetting(name: 'Clear cache', action: clearCache)
+  SettingGroup(title: 'Design', settings: [
+    EnumSetting(name: 'Theme', enumName: 'ThemeSelection', values: ThemeSelection.values, value: ThemeSelection.System, icon: const Icon(Icons.light))
   ]),
-  SettingGroup(title: 'Special', settings: [
-    EnumSetting(name: 'Enum', enumName: '_Hi', values: _Hi.values, value: _Hi.Hi, icon: const Icon(Icons.emoji_people)),
-    EnumSetting(name: 'Enum2', enumName: '_Hi', values: _Hi.values, value: _Hi.Bye, icon: const Icon(Icons.emoji_people)),
-    StringSetting(name: 'String', value: 'S', icon: const Icon(Icons.emoji_people))
+  SettingGroup(title: 'Erweitert', settings: [
+    VoidSetting(name: 'Daten zurücksetzen', action: resetData)
   ])
+  //SettingGroup(title: 'Allgemein', settings: [
+  //  BoolSetting(name: 'Debug', value: true, icon: const Icon(Icons.bug_report)),
+  //  BoolSetting(name: 'Debug2', value: true, icon: const Icon(Icons.bug_report)),
+  //  VoidSetting(name: 'Reset Data', action: resetData)
+  //]),
+  //SettingGroup(title: 'Special', settings: [
+  //  EnumSetting(name: 'Enum', enumName: '_Hi', values: _Hi.values, value: _Hi.Hi, icon: const Icon(Icons.emoji_people)),
+  //  EnumSetting(name: 'Enum2', enumName: '_Hi', values: _Hi.values, value: _Hi.Bye, icon: const Icon(Icons.emoji_people)),
+  //  StringSetting(name: 'String', value: 'S', icon: const Icon(Icons.emoji_people))
+  //])
 ];
 enum _Hi { Hi, Hello, Bye }
+
+enum ThemeSelection { System, Light, Dark }
 
 class SettingGroup {
   final String title;
@@ -155,7 +163,13 @@ class EnumSetting<T> extends Setting<T> {
   @override
   ListTile settingRow(BuildContext context) => ListTile(
     leading: icon,
-    title: Text(name),
+    title: Row(
+      children: [
+        Text(name),
+        Text(" - ", style: TextStyle(color: maristenBlueLight)),
+        Text(_value.toString().substring(_enLength)) //, style: TextStyle(fontWeight: FontWeight.bold)
+      ]
+    ),//Text("$name: ${_value.toString().substring(_enLength)}"),
     trailing: Icon(Icons.navigate_next),
     onTap: () {
       Navigator.push(context, MaterialPageRoute(builder: (context) => _EnumSettingScreen(this, name, enumName, _enLength, values, _value)));
@@ -230,9 +244,12 @@ class _EnumSettingScreenState extends State<_EnumSettingScreen> {
             title: Text(values[index]),
             trailing: values[index] == value ? Icon(Icons.check) : null,
             onTap: () {
+              _settingsState.setState(() {
               setState(() {
                 value = values[index];
                 setting.setValue(setting.values[index]);
+              });
+
               });
               //Navigator.pop(context);
             },
