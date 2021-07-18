@@ -34,16 +34,26 @@ final _mainState = _MyAppState();
 class _MyAppState extends State<MyApp> {
   //Indexing the menus for the BottomNavigationBar
   int _selectedIndex = 0;
+
+  int _scheduleDay = todayIndex();
+
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static final List<Widget> _widgetOptions = <Widget>[
-    Text(
-      '${dayOfSchedule()}:',
-      style: optionStyle,
-    ),
+  /*static final List<Widget> _widgetOptions = <Widget>[
+    Row(children: <Widget>[
+      GestureDetector(
+        child: Icon(Icons.chevron_left),
+        onTap: () => --_scheduleDay,
+      ),
+      Text(
+        '${dayOfSchedule(_scheduleDay)}:',
+        style: optionStyle,
+      ),
+      Icon(Icons.chevron_right),
+    ]),
     Text('Index 1: Mensaplan', style: optionStyle),
     Text('Index 2: Vertretungsplan', style: optionStyle),
-  ];
+  ];*/
 
   Widget _body() {
     switch (_selectedIndex) {
@@ -77,12 +87,12 @@ class _MyAppState extends State<MyApp> {
           appBar: AppBar(
             title: Text('MaristenPlaner'),
           ),
-          body: Column(
+          body: /*Column(
             children: [
-              _widgetOptions[_selectedIndex],
-              _body()
-            ],
-          ),
+              _widgetOptions[_selectedIndex],*/
+              _body(),
+            //],
+          //),
 
           //Building the BottomNavigationBar
           bottomNavigationBar: BottomNavigationBar(

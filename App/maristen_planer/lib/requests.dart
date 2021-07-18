@@ -5,7 +5,7 @@ import 'package:maristen_planer/utils.dart';
 
 const apiRoot = 'https://www.loens2.com/maristenplaner';
 
-Future<Json> fetchSchedule() async {print('Fetch schedule');return request('/schedule/000000');}
+Future<Json> fetchSchedule() async {print('Fetch schedule');return request('/schedule/000000');} // /schedule?day=$day&class=$clazz&subjects=$subjectsCSV
 
 Future<Json> registerRequest(String fName, String lName) async => request('/register?first_name=$fName&last_name=$lName');
 

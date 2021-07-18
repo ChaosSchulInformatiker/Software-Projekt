@@ -1,13 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:maristen_planer/constants.dart';
 import 'package:maristen_planer/utils.dart';
 
 import '../requests.dart';
 
 // Für Kayra
 
-Widget _buildSchedule(List<dynamic> lessons) {
+Widget _buildSchedule(State state, List<dynamic> lessons) {
   final rows = <DataRow>[];
   var i = 0;
   for (Json? lesson in lessons) {
@@ -68,7 +69,41 @@ Widget _buildSchedule(List<dynamic> lessons) {
     rows: rows
    );
 
-  return table;
+  print(dayOfSchedule(_scheduleDay));
+  return Column(
+    children: <Widget>[
+      Text(
+        dayOfSchedule(_scheduleDay),
+        style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: maristenBlue),
+      ),
+      Row(
+        children: <Widget>[
+          GestureDetector(
+            child: const Icon(Icons.chevron_left),
+            onTap: () {
+              --_scheduleDay;
+              if (_scheduleDay < 1) _scheduleDay = 5;
+              _refresh(state);
+            },
+          ),
+          GestureDetector(
+            child: table,
+            onHorizontalDragEnd: (details) {
+              if (details.primaryVelocity!.abs() < 0.1) return;
+              if (details.primaryVelocity! > 0) _decSD(state);
+              else _incSD(state);
+            },
+          ),
+          GestureDetector(
+            child: const Icon(Icons.chevron_right),
+            onTap: () => _incSD(state),
+          )
+        ],
+        mainAxisAlignment: MainAxisAlignment.center,
+      ),
+      //table
+    ],
+  );
 }
 
 late Future<Json> schedule;
@@ -78,6 +113,19 @@ void initSchedule() {
 }
 
 Widget? _widget;
+
+int _scheduleDay = todayIndex();
+void _decSD(State state) {
+  --_scheduleDay;
+  if (_scheduleDay < 1 || _scheduleDay > 5) _scheduleDay = 5;
+  _refresh(state);
+}
+void _incSD(State state) {
+  ++_scheduleDay;
+  if (_scheduleDay == 6) _scheduleDay = 1;
+  else if (_scheduleDay > 6) _scheduleDay = 2;
+  _refresh(state);
+}
 
 Widget scheduleWidget(State state) =>
     _widget ??
@@ -92,15 +140,12 @@ Widget scheduleWidget(State state) =>
               RefreshIndicator(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
-                  child: Center(child: _buildSchedule(lessons)),
+                  child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: Center(child: _buildSchedule(state, lessons)), physics: const AlwaysScrollableScrollPhysics()),
                   physics: const AlwaysScrollableScrollPhysics(),
                   clipBehavior: Clip.hardEdge,
                 ),
                 onRefresh: () async {
-                  await (schedule = fetchSchedule());
-                  state.setState(() {
-                    _widget = null;
-                  });
+                  _refresh(state);
                 },
               )
             ;
@@ -110,6 +155,13 @@ Widget scheduleWidget(State state) =>
                     TextStyle(color: Colors.red, fontWeight: FontWeight.bold));
           }
 
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         }
     );
+
+void _refresh(State state) async {
+  await (schedule = fetchSchedule());
+  state.setState(() {
+    _widget = null;
+  });
+}

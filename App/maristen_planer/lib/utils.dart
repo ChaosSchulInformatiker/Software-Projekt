@@ -9,8 +9,9 @@ int scheduleTodayIndex() {
   return ti - 1;
 }
 
-String dayOfSchedule() {
-  switch (todayIndex()) {
+String dayOfScheduleToday() => dayOfSchedule(todayIndex());
+String dayOfSchedule(int index) {
+  switch (index) {
     case DateTime.monday:
     case DateTime.saturday:
     case DateTime.sunday:
