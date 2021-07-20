@@ -4,7 +4,7 @@ import tk.q11mk.database.Database
 import tk.q11mk.database.Table
 import tk.q11mk.utils.getSecretProperty
 
-val database = Database(getSecretProperty("db_url"), getSecretProperty("db_username"), getSecretProperty("db_password"))
+/*val database = Database(getSecretProperty("db_url"), getSecretProperty("db_username"), getSecretProperty("db_password"))
 
 val schedulesSchema = database.getSchema("schedules").getOrDefault(database.createSchema("schedules").getOrThrow())
 
@@ -28,4 +28,4 @@ val idsTable = constantsSchema.getTable<String>("ids").getOrDefault(constantsSch
 fun getAccountFromId(id: Long) = idsTable.getCell<String>(id.toString(), "first_name").getOrNull()
 
 val accountClassesTable = constantsSchema.getTable<String>("classes").getOrDefault(constantsSchema.createTable("classes", "id", Table.Column.Type.STRING, "NOT_NULL").getOrThrow())
-fun getClassFromId(id: Long) = idsTable.getCell<String>(id.toString(), "class").getOrNull() to idsTable.getCell<List<String>>(id.toString(), "subjects")
+fun getClassFromId(id: Long) = idsTable.getCell<String>(id.toString(), "class").getOrNull() to idsTable.getCell<List<String>>(id.toString(), "subjects")*/
