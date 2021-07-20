@@ -16,25 +16,29 @@ class Schema internal constructor(val name: String, private val stmt: Statement)
      *
      * @author Simon
      */
-    fun <P> createTable(name: String, columns: LinkedHashMap<String, DataType<*>>, primaryKeyName: String) = runCatching {
+    fun <P> createTable(name: String, primaryKey: Pair<String, DataType<P>>, vararg columns: Pair<String, DataType<*>>) = runCatching {
         stmt.run(buildString {
             append("CREATE TABLE `")
             append(this@Schema.name)
             append("`.`")
             append(name)
-            append("` (")
+            append("` (`")
+            append(primaryKey.first)
+            append("` ")
+            append(primaryKey.second.notNull())
+            append(", ")
             for ((c, t) in columns) {
                 append('`')
                 append(c)
-                append("` `")
+                append("` ")
                 append(t)
-                append("`, ")
+                append(", ")
             }
             append("PRIMARY KEY (`")
-            append(primaryKeyName)
+            append(primaryKey.first)
             append("`));")
         })
-        Table<P>(name, primaryKeyName, this.name, stmt)
+        Table<P>(name, primaryKey.first, this.name, stmt)
     }
 
     /*fun <P> createTable(name: String, pkName: String, type: Table.Column.Type<P>, vararg flags: String = arrayOf("NOT NULL", "AUTO_INCREMENT")) = try {

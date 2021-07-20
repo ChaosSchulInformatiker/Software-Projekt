@@ -9,16 +9,18 @@ class Table <P> internal constructor(
     private val schemaName: String,
     private val stmt: Statement
 ) {
+    val tableName = "`$schemaName`.`$name`"
+
     fun insertRow(data: List<Any?>) = runCatching<Unit> {
-        stmt.run("INSERT INTO `$schemaName`.`$name` VALUES (${data.joinToString()})")
+        stmt.run("INSERT INTO $tableName VALUES (${data.joinToString { it.toSqlData() }})")
     }
 
     fun <T> set(column: String, primaryKey: P, data: T) = runCatching<Unit> {
-        stmt.run("UPDATE `$schemaName`.`$name` SET `$column`=$data WHERE `$primaryKeyName`=$primaryKey")
+        stmt.run("UPDATE $tableName SET `$column`=${data.toSqlData()} WHERE `$primaryKeyName`=$primaryKey")
     }
 
     fun insertColumns(data: LinkedHashMap<String, List<Any?>>) = runCatching<Unit> {
-        stmt.run("INSERT INTO `$schemaName`.`$name` (${data.keys.joinToString()}) VALUES (${data.values.joinToString()})")
+        stmt.run("INSERT INTO $tableName (${data.keys.joinToString()}) VALUES (${data.values.joinToString { it.toSqlData() }})")
     }
 
     fun deleteCell(column: String, primaryKey: P) = runCatching<Unit> {
@@ -26,7 +28,7 @@ class Table <P> internal constructor(
     }
 
     fun getColumns(primaryKey: P, columns: List<String>) = runCatching<List<Any?>> {
-        val rs = stmt.run("SELECT ${columns.joinToString()} FROM `$schemaName`.`$name` WHERE `$primaryKeyName`=$primaryKey")
+        val rs = stmt.query("SELECT ${columns.joinToString()} FROM $tableName WHERE `$primaryKeyName`=$primaryKey")
         val data = mutableListOf<Any?>()
         while (rs.next()) {
             for (column in columns) data.add(rs.getObject(column))
@@ -35,7 +37,7 @@ class Table <P> internal constructor(
     }
 
     fun getRow(primaryKey: P) = runCatching<List<Any?>> {
-        val rs = stmt.query("SELECT * FROM `$schemaName`.`$name` WHERE `$primaryKeyName`=$primaryKey")
+        val rs = stmt.query("SELECT * FROM $tableName WHERE `$primaryKeyName`=$primaryKey")
         val data = mutableListOf<Any?>()
         while (rs.next()) {
             repeat(rs.metaData.columnCount) { i -> data.add(rs.getObject(i)) }
@@ -45,7 +47,7 @@ class Table <P> internal constructor(
 
     @Suppress("unchecked_cast")
     fun <C> get(primaryKey: P, column: String) = runCatching<C> {
-        stmt.query("SELECT `$column` FROM `$schemaName`.`$name` WHERE `$primaryKeyName`=$primaryKey").apply(ResultSet::next).getObject(column) as C
+        stmt.query("SELECT `$column` FROM $tableName WHERE `$primaryKeyName`=$primaryKey").apply(ResultSet::next).getObject(column) as C
     }
 
     fun <T> renameColumn(column: String, name: String, type: DataType<T>) = runCatching {
@@ -53,16 +55,18 @@ class Table <P> internal constructor(
     }
 
     fun <T> changeColumnType(column: String, type: DataType<T>) = runCatching {
-        stmt.run("ALTER TABLE `$schemaName`.`$name` MODIFY `$column` $type")
+        stmt.run("ALTER TABLE $tableName MODIFY `$column` $type")
     }
 
     fun <T> addColumn(name: String, type: DataType<T>) = runCatching {
-        stmt.run("ALTER TABLE `$schemaName`.`$name` ADD `$name` $type")
+        stmt.run("ALTER TABLE `$schemaName`.`${this.name}` ADD `$name` $type")
     }
 
     fun deleteColumn(name: String) = runCatching {
-        stmt.run("ALTER TABLE `$schemaName`.`$name` DROP COLUMN `$name`")
+        stmt.run("ALTER TABLE `$schemaName`.`${this.name}` DROP COLUMN `$name`")
     }
+
+    private fun Any?.toSqlData() = if (this is String) "'$this'" else toString()
 
     //private val columns: MutableList<Column<*>> = mutableListOf(Column(primaryKeyName, Column.Type.INT, null, listOf("NOT NULL", "AUTO_INCREMENT")))
 
