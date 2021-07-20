@@ -62,7 +62,10 @@ fun main() {
     }.start(wait = true)
 }
 
-suspend inline fun <reified T> ApplicationCall.response(vararg values: T) = respond(Response(200, values))
+suspend inline fun <reified T> ApplicationCall.response(vararg values: T) {
+    response.header("Access-Control-Allow-Origin", "*")
+    respond(Response(200, values))
+}
 suspend inline fun ApplicationCall.respond400() = respond(Code400)
 
 @Serializable
