@@ -20,4 +20,4 @@
 ***⚠ Diese Software ist nur für das Maristenkolleg Mindelheim bestimmt!***
 
 
-###### *Erstellt mit ♥ & 🧠 von Simon, Visar, Leo, Kayra & Maximillian | Abijahrgang 2020/2022*
+###### *Erstellt mit ♥ & 🧠 von Simon, Visar, Leo, Kayra & Maxi | Abijahrgang 2020/2022*
