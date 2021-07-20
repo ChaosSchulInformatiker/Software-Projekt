@@ -15,7 +15,7 @@ import java.sql.Statement
  *
  * @author Simon
  */
-class Database(url: String, username: String, password: String) : AutoCloseable {
+class Database(private val url: String, private val username: String, private val password: String) : AutoCloseable {
     private val connection: Connection = DriverManager.getConnection(url, username, password)
     private val stmt: Statement = connection.createStatement()
 
@@ -27,17 +27,24 @@ class Database(url: String, username: String, password: String) : AutoCloseable 
      *
      * @author Simon
      */
-    fun createSchema(name: String) = try {
-        stmt.executeUpdate("CREATE SCHEMA `$name`;")
-        Result.success(Schema(name, stmt))
-    } catch (e: SQLException) {
-        Result.failure(e)
+    fun createSchema(name: String) = runCatching {
+        stmt.run("CREATE DATABASE `$name`;")
+        Schema(name, stmt)
     }
 
-    fun getSchema(name: String) = try {
-        throw SQLException()
-    } catch (e: SQLException) {
-        Result.failure<Schema>(e)
+    /**
+     *
+     */
+    fun getSchema(name: String) = runCatching {
+        //val connection = DriverManager.getConnection("$url/$name", username, password)
+        Schema(name, stmt/*connection.createStatement()*/)
+    }
+
+    /**
+     *
+     */
+    fun deleteSchema(name: String) = runCatching<Unit> {
+        stmt.run("DROP DATABASE `$name`")
     }
 
     override fun close() {

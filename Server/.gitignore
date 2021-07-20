@@ -6,4 +6,6 @@ build/classes
 build/kotlin
 # Not build/docs
 
-out
+out/
+
+src/main/resources/secret.properties

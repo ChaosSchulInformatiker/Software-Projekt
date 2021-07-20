@@ -22,14 +22,17 @@ fun main() {
         }
 
         routing {
-            get("/schedule/{id}") {
-                val id = call.parameters["id"]
+            get("/schedule") {
+                val day = call.request.queryParameters["day"]?.toIntOrNull()
+                val clazz = call.request.queryParameters["class"]
+                val subjectsCSV = call.request.queryParameters["subjects"]
 
-                if (id == "000000") {
-                    call.response(exampleSchedule)
-                } else {
+                if (day == null || clazz == null || subjectsCSV == null) {
                     call.respond400()
+                    return@get
                 }
+
+                call.response(exampleSchedule[day])
             }
 
             get("/register") {
@@ -59,7 +62,10 @@ fun main() {
     }.start(wait = true)
 }
 
-suspend inline fun <reified T> ApplicationCall.response(vararg values: T) = respond(Response(200, values))
+suspend inline fun <reified T> ApplicationCall.response(vararg values: T) {
+    response.header("Access-Control-Allow-Origin", "*")
+    respond(Response(200, values))
+}
 suspend inline fun ApplicationCall.respond400() = respond(Code400)
 
 @Serializable

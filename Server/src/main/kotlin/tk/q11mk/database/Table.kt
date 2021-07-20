@@ -1,12 +1,76 @@
 package tk.q11mk.database
 
-import java.sql.SQLException
+import java.sql.ResultSet
 import java.sql.Statement
 
-class Table <P> internal constructor(val name: String, pkName: String, private val schemaName: String, private val stmt: Statement) {
-    private val columns: MutableList<Column<*>> = mutableListOf(Column(pkName, Column.Type.INT, null, listOf("NOT NULL", "AUTO_INCREMENT")))
+class Table <P> internal constructor(
+    val name: String,
+    private val primaryKeyName: String,
+    private val schemaName: String,
+    private val stmt: Statement
+) {
+    val tableName = "`$schemaName`.`$name`"
 
-    /**
+    fun insertRow(data: List<Any?>) = runCatching<Unit> {
+        stmt.run("INSERT INTO $tableName VALUES (${data.joinToString { it.toSqlData() }})")
+    }
+
+    fun <T> set(column: String, primaryKey: P, data: T) = runCatching<Unit> {
+        stmt.run("UPDATE $tableName SET `$column`=${data.toSqlData()} WHERE `$primaryKeyName`=$primaryKey")
+    }
+
+    fun insertColumns(data: LinkedHashMap<String, List<Any?>>) = runCatching<Unit> {
+        stmt.run("INSERT INTO $tableName (${data.keys.joinToString()}) VALUES (${data.values.joinToString { it.toSqlData() }})")
+    }
+
+    fun deleteCell(column: String, primaryKey: P) = runCatching<Unit> {
+        set(column, primaryKey, null)
+    }
+
+    fun getColumns(primaryKey: P, columns: List<String>) = runCatching<List<Any?>> {
+        val rs = stmt.query("SELECT ${columns.joinToString()} FROM $tableName WHERE `$primaryKeyName`=$primaryKey")
+        val data = mutableListOf<Any?>()
+        while (rs.next()) {
+            for (column in columns) data.add(rs.getObject(column))
+        }
+        data
+    }
+
+    fun getRow(primaryKey: P) = runCatching<List<Any?>> {
+        val rs = stmt.query("SELECT * FROM $tableName WHERE `$primaryKeyName`=$primaryKey")
+        val data = mutableListOf<Any?>()
+        while (rs.next()) {
+            repeat(rs.metaData.columnCount) { i -> data.add(rs.getObject(i)) }
+        }
+        data
+    }
+
+    @Suppress("unchecked_cast")
+    fun <C> get(primaryKey: P, column: String) = runCatching<C> {
+        stmt.query("SELECT `$column` FROM $tableName WHERE `$primaryKeyName`=$primaryKey").apply(ResultSet::next).getObject(column) as C
+    }
+
+    fun <T> renameColumn(column: String, name: String, type: DataType<T>) = runCatching {
+        stmt.run("ALTER TABLE `$schemaName`.`${this.name}` CHANGE COLUMN `$column` `$name` $type;")
+    }
+
+    fun <T> changeColumnType(column: String, type: DataType<T>) = runCatching {
+        stmt.run("ALTER TABLE $tableName MODIFY `$column` $type")
+    }
+
+    fun <T> addColumn(name: String, type: DataType<T>) = runCatching {
+        stmt.run("ALTER TABLE `$schemaName`.`${this.name}` ADD `$name` $type")
+    }
+
+    fun deleteColumn(name: String) = runCatching {
+        stmt.run("ALTER TABLE `$schemaName`.`${this.name}` DROP COLUMN `$name`")
+    }
+
+    private fun Any?.toSqlData() = if (this is String) "'$this'" else toString()
+
+    //private val columns: MutableList<Column<*>> = mutableListOf(Column(primaryKeyName, Column.Type.INT, null, listOf("NOT NULL", "AUTO_INCREMENT")))
+
+    /*/**
      * Add a column at the end of the table
      *
      * @param name The name of the column
@@ -39,8 +103,9 @@ class Table <P> internal constructor(val name: String, pkName: String, private v
         Result.failure(e)
     }
 
+    @Suppress("unchecked_cast")
     fun <T> getCell(pk: P, column: String): Result<T> = try {
-        throw SQLException()
+        Result.success(stmt.run("SELECT $column FROM $name WHERE $pkName = $pk").getNString(0)) as Result<T>
     } catch (e: SQLException) {
         Result.failure<Nothing>(e)
     }
@@ -55,5 +120,5 @@ class Table <P> internal constructor(val name: String, pkName: String, private v
                 val JSON = Type<String>("JSON")
             }
         }
-    }
+    }*/
 }

@@ -17,6 +17,15 @@ data class Schedule(
     val th: Day,
     val fr: Day,
 ) {
+    operator fun get(index: Int) = when (index) {
+        0 -> mo
+        1 -> tu
+        2 -> we
+        3 -> th
+        4 -> fr
+        else -> throw IndexOutOfBoundsException()
+    }
+
     @Serializable
     data class Day(
         val lessons: List<Lesson?>
