@@ -12,6 +12,7 @@ Future<void> main() async {
   settings.length; // Load settings
   int id = await getAccountId();
   final themeMode = themeDataOfMode(await settings[0].settings[0].getValue());
+  print(themeMode);
   runApp(MaterialApp(
     theme: darkTheme,
     darkTheme: darkTheme,
@@ -78,42 +79,37 @@ class _MyAppState extends State<MyApp> {
 
   //Building the App itself
   @override
-  Widget build(BuildContext context) => MaterialApp(
-        title: 'MaristenPlaner',
-        theme: lightTheme,
-        darkTheme: darkTheme,
-        home: Scaffold(
-          drawer: SideDrawer(),
-          appBar: AppBar(
-            title: Text('MaristenPlaner'),
-          ),
-          body: /*Column(
-            children: [
-              _widgetOptions[_selectedIndex],*/
-              _body(),
-            //],
-          //),
+  Widget build(BuildContext context) => Scaffold(
+    drawer: SideDrawer(),
+    appBar: AppBar(
+      title: Text('MaristenPlaner'),
+    ),
+    body: /*Column(
+      children: [
+        _widgetOptions[_selectedIndex],*/
+        _body(),
+      //],
+    //),
 
-          //Building the BottomNavigationBar
-          bottomNavigationBar: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.date_range),
-                label: 'Stundenplan',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.restaurant_menu),
-                label: 'Mensaplan',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.event_busy),
-                label: 'Vertretungsplan',
-              ),
-            ],
-            currentIndex: _selectedIndex,
-            selectedItemColor: maristenBlue,
-            onTap: _onItemTapped,
-          ),
+    //Building the BottomNavigationBar
+    bottomNavigationBar: BottomNavigationBar(
+      items: const <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+          icon: Icon(Icons.date_range),
+          label: 'Stundenplan',
         ),
-      );
+        BottomNavigationBarItem(
+          icon: Icon(Icons.restaurant_menu),
+          label: 'Mensaplan',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.event_busy),
+          label: 'Vertretungsplan',
+        ),
+      ],
+      currentIndex: _selectedIndex,
+      selectedItemColor: maristenBlueLight,
+      onTap: _onItemTapped,
+    ),
+  );
 }
