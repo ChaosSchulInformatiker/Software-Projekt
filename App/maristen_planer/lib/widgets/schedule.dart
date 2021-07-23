@@ -109,7 +109,7 @@ Widget _buildSchedule(State state, List<dynamic> lessons) {
 late Future<Json> schedule;
 
 void initSchedule() {
-  schedule = fetchSchedule();
+  schedule = fetchSchedule(_scheduleDay-1, '7B', ['hi', 'hi' , 'ih', 'hi']);
 }
 
 Widget? _widget;
@@ -133,8 +133,7 @@ Widget scheduleWidget(State state) =>
         future: schedule,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final List<dynamic> lessons = snapshot.data!['result'][0]['days']
-                [scheduleTodayIndex()]['lessons'];
+            final List<dynamic> lessons = snapshot.data!['result'][0]['lessons']; //['days'][scheduleTodayIndex()]
 
             return _widget =
               RefreshIndicator(
@@ -160,7 +159,7 @@ Widget scheduleWidget(State state) =>
     );
 
 void _refresh(State state) async {
-  await (schedule = fetchSchedule());
+  await (schedule = fetchSchedule(_scheduleDay-1, '7B', ['hi', 'hi' , 'ih', 'hi']));
   state.setState(() {
     _widget = null;
   });
