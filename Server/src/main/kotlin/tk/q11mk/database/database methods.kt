@@ -6,8 +6,8 @@ val database = Database(getSecretProperty("db_url"), getSecretProperty("db_usern
 
 val schedulesSchema = database.getSchema("schedules").getOrElse { database.createSchema("schedules").getOrThrow() }
 
-fun getScheduleTable(day: String) = schedulesSchema.getTable<Int>(day).getOrElse { schedulesSchema.createTable(day, "lesson" to DataType.INT).getOrThrow() }
-fun getLesson(day: String, lesson: Int, teacher: String) = getScheduleTable(day).get<String>(lesson, teacher).getOrNull()
+fun getScheduleTable(dayIndex: Int) = schedulesSchema.getTable<Int>(dayIndex.toString()).getOrElse { schedulesSchema.createTable(dayIndex.toString(), "lesson" to DataType.INT).getOrThrow() }
+fun getLesson(dayIndex: Int, lesson: Int, teacher: String) = getScheduleTable(dayIndex).get<String>(lesson, teacher).getOrNull()
 
 val constantsSchema = database.getSchema("constants").getOrElse { database.createSchema("constants").getOrThrow() }
 
