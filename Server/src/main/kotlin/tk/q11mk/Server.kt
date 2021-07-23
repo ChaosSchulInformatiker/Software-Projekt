@@ -10,6 +10,7 @@ import io.ktor.serialization.*
 import io.ktor.server.cio.*
 import io.ktor.server.engine.*
 import kotlinx.serialization.Serializable
+import tk.q11mk.accounts.changeClassData
 import tk.q11mk.accounts.receiveCode
 import tk.q11mk.accounts.sendCode
 import tk.q11mk.schedule.Schedule
@@ -58,6 +59,19 @@ fun main() {
                 }
 
                 call.response(receiveCode(email, code))
+            }
+
+            get("/change_class_data") {
+                val id = call.request.queryParameters["id"]
+                val clazz = call.request.queryParameters["class"]
+                val subjects = call.request.queryParameters["subjects"]
+
+                if (id == null || clazz == null || subjects == null) {
+                    call.respond400()
+                    return@get
+                }
+
+                call.response(changeClassData(id, clazz, subjects))
             }
         }
     }.start(wait = true)

@@ -28,11 +28,12 @@ fun getClass(name: String) = classesTable.get<String>(name, "teacher").getOrNull
 
 val accountsSchema = database.getSchema("accounts").getOrElse { database.createSchema("accounts").getOrThrow() }
 
-val idsTable = constantsSchema.getTable<String>("ids").getOrElse { constantsSchema.createTable("ids", "id" to DataType.STRING(10), "last_name" to DataType.STRING, "first_name" to DataType.STRING, "email" to DataType.STRING, "teacher" to DataType.BOOL).getOrThrow() }
-fun getAccountFromId(id: Long) = idsTable.get<String>(id.toString(), "first_name").getOrNull()
+val idsTable = accountsSchema.getTable<String>("ids").getOrElse { accountsSchema.createTable("ids", "id" to DataType.STRING(10), "last_name" to DataType.STRING, "first_name" to DataType.STRING, "email" to DataType.STRING(64), "teacher" to DataType.BOOL).getOrThrow() }
+fun getAccountFromId(id: Long) = idsTable.getRow(id.toString()).getOrNull()?.takeIf { it.size == 5 }?.let { Account(it[1] as String, it[2] as String, it[3] as String, it[4] as Boolean) }
+data class Account(val lastName: String, val firstName: String, val email: String, val isTeacher: Boolean)
 
-val accountClassesTable = constantsSchema.getTable<String>("classes").getOrElse { constantsSchema.createTable("classes", "id" to DataType.STRING(10), "class" to DataType.STRING(5), "subjects" to DataType.CSV<String>(50)).getOrThrow() }
-fun getClassFromId(id: Long) = idsTable.get<String>(id.toString(), "class").getOrNull() to idsTable.get<String>(id.toString(), "subjects")
+val accountClassesTable = accountsSchema.getTable<String>("classes").getOrElse { accountsSchema.createTable("classes", "id" to DataType.STRING(10), "class" to DataType.STRING(5), "subjects" to DataType.CSV<String>(50)).getOrThrow() }
+fun getClassFromId(id: Long) = accountClassesTable.get<String>(id.toString(), "class").getOrNull() to accountClassesTable.get<String>(id.toString(), "subjects").getOrNull()
 
 /*val substitutesSchema = database.getSchema("substitutes").getOrElse { database.createSchema("substitutes").getOrThrow() }
 val substitutesTable = substitutesSchema.getTable<>()*/

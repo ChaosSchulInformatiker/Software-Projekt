@@ -26,7 +26,7 @@ class Table <P> internal constructor(
     }
 
     fun <T> set(column: String, primaryKey: P, data: T) = runCatching<Unit> {
-        stmt.run("UPDATE $tableName SET `$column`=${data.toSqlData()} WHERE `$primaryKeyName`=$primaryKey")
+        stmt.run("UPDATE $tableName SET `$column`=${data.toSqlData()} WHERE `$primaryKeyName`=${primaryKey.toSqlData()}")
     }
 
     fun insertColumns(data: LinkedHashMap<String, List<Any?>>) = runCatching<Unit> {
@@ -38,7 +38,7 @@ class Table <P> internal constructor(
     }
 
     fun getColumns(primaryKey: P, columns: List<String>) = runCatching<List<Any?>> {
-        val rs = stmt.query("SELECT ${columns.joinToString()} FROM $tableName WHERE `$primaryKeyName`=$primaryKey")
+        val rs = stmt.query("SELECT ${columns.joinToString()} FROM $tableName WHERE `$primaryKeyName`=${primaryKey.toSqlData()}")
         val data = mutableListOf<Any?>()
         while (rs.next()) {
             for (column in columns) data.add(rs.getObject(column))
@@ -47,30 +47,35 @@ class Table <P> internal constructor(
     }
 
     fun getRow(primaryKey: P) = runCatching<List<Any?>> {
-        val rs = stmt.query("SELECT * FROM $tableName WHERE `$primaryKeyName`=$primaryKey")
+        val rs = stmt.query("SELECT * FROM $tableName WHERE `$primaryKeyName`=${primaryKey.toSqlData()}")
         val data = mutableListOf<Any?>()
         while (rs.next()) {
-            repeat(rs.metaData.columnCount) { i -> data.add(rs.getObject(i)) }
+            repeat(rs.metaData.columnCount) { i -> data.add(rs.getObject(i + 1)) }
         }
         data
     }
 
     @Suppress("unchecked_cast")
     fun <C> get(primaryKey: P, column: String) = runCatching<C> {
-        stmt.query("SELECT `$column` FROM $tableName WHERE `$primaryKeyName`=$primaryKey").apply(ResultSet::next).getObject(column) as C
+        stmt.query("SELECT `$column` FROM $tableName WHERE `$primaryKeyName`=${primaryKey.toSqlData()}").apply(ResultSet::next).getObject(column) as C
     }
 
     @Suppress("unchecked_cast")
     fun <C> getLike(column: String, like: String) = runCatching<List<Pair<P, C>>> {
         val rs = try {
             stmt.query("SELECT `$primaryKeyName`, `$column` FROM $tableName WHERE `$column` LIKE '$like'")
-        } catch (e: SQLSyntaxErrorException) { return@runCatching listOf() }
+        } catch (e: SQLSyntaxErrorException) {
+            println("Empty column")
+            return@runCatching listOf()
+        }
         val data = mutableListOf<Pair<P, C>>()
         while (rs.next()) {
             data.add(rs.getObject(primaryKeyName) as P to rs.getObject(column) as C)
         }
         data
     }
+
+    fun has(primaryKey: P) = stmt.query("SELECT `$primaryKeyName` FROM $tableName WHERE `$primaryKeyName`=${primaryKey.toSqlData()}").next()
 
     fun <T> renameColumn(column: String, name: String, type: DataType<T>) = runCatching {
         stmt.run("ALTER TABLE `$schemaName`.`${this.name}` CHANGE COLUMN `$column` `$name` $type;")

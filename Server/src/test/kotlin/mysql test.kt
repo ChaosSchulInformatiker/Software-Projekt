@@ -1,6 +1,6 @@
-import tk.q11mk.database.DataType
-import tk.q11mk.database.Database
-import tk.q11mk.database.getLesson
+import tk.q11mk.accounts.changeClassData
+import tk.q11mk.database.*
+import tk.q11mk.schedule.Schedule
 
 fun main() {
     /*Database("jdbc:mysql://127.0.0.1:3306", "Test", "test").use { db ->
@@ -18,5 +18,20 @@ fun main() {
         //t.set("SCHN", 0, "{}").getOrThrow()
         t.insertRow(listOf(0, "{}")).getOrThrow()
     }*/
-    println(getLesson("mon", 0, "SCHN"))
+    /*getScheduleTable(0).addColumn("SCHN", DataType.STRING(256)).getOrThrow()
+    getScheduleTable(0)//.set("SCHN", 1, """{"class": "7A"}""").getOrThrow()
+        .insertRow(listOf(1, """{"class": "7A"}""")).getOrThrow()*/
+
+    //getScheduleTable(0).set("SCHN", 1, """{"class":"7A","subject":"M"}""")
+    //println(getLesson(0, 1, "SCHN"))
+
+    //println(getScheduleTable(0).getLike<String>("SCHN", """%"class"%:%"7A"%"""))
+
+    //Schedule.Day.fromRequest(0, "7A", "D,E,M,F")
+
+    //idsTable.insertRow(listOf(1234567890L, "Simon", "Neumann", "simon.neumann@maristenkolleg.de", false)).getOrThrow()
+    //println(getAccountFromId(1234567890))
+    //println(idsTable.has("51234567890"))
+
+    //println(changeClassData(1234567890.toString(), "11Q", "M1,D3"))
 }
