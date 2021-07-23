@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'tk.q11mk'
-version '0.1-SNAPSHOT'
+version '0.2'
 
 repositories {
     mavenCentral()
@@ -48,6 +48,21 @@ jar {
     manifest {
         attributes 'Main-Class': 'tk.q11mk.Server'
     }
+}
+
+shadowJar {
+    def sout = new ByteArrayOutputStream()
+    exec {
+        executable 'git'
+        args('rev-parse', '--short', 'HEAD')
+        standardOutput(sout)
+    }
+    def ba = sout.toByteArray()
+    def hba = new byte[ba.length - 1]
+    System.arraycopy(ba, 0, hba, 0, hba.length)
+    def hash = new String(hba)
+    archiveName "MaristenPlaner-Server-v$project.version-${hash}.jar"
+    //archiveName jarName
 }
 
 generateUml {
