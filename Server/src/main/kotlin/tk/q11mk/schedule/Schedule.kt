@@ -41,7 +41,7 @@ data class Schedule @Deprecated("Use Day") constructor(
 
                 val dayTable = getScheduleTable(dayIndex)
 
-                val teachers = dayTable.columns.getOrThrow()
+                val teachers = dayTable.columns.getOrThrow().toMutableList()
                 teachers.remove("id")
 
                 val lessons = mutableListOf<Lesson?>()

@@ -1,7 +1,6 @@
 import kotlinx.coroutines.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import tk.q11mk.exampleSchedule
 import tk.q11mk.nextId
 import tk.q11mk.schedule.Schedule
 import tk.q11mk.utils.getSecretProperty
@@ -19,7 +18,7 @@ fun main() {
         }
         println("$i (${i % mod})")
     }*/
-    println(Json.encodeToString(exampleSchedule))
+    //println(Json.encodeToString(exampleSchedule))
 }
 
 /*fun main() {

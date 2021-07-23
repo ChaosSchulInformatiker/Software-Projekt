@@ -13,6 +13,7 @@ import kotlinx.serialization.Serializable
 import tk.q11mk.accounts.changeClassData
 import tk.q11mk.accounts.receiveCode
 import tk.q11mk.accounts.sendCode
+import tk.q11mk.database.classesTable
 import tk.q11mk.schedule.Schedule
 import tk.q11mk.utils.getPublicProperty
 
@@ -73,6 +74,10 @@ fun main() {
 
                 call.response(changeClassData(id, clazz, subjects))
             }
+
+            get("/get_all_classes") {
+                call.response(*classesTable.keys.getOrDefault(emptyList()).toTypedArray())
+            }
         }
     }.start(wait = true)
 }
@@ -93,7 +98,7 @@ class Response<T>(
 
 val Code400 get() = Response<String>(400, emptyArray())
 
-val exampleSchedule = Schedule(
+/*val exampleSchedule = Schedule(
     Schedule.Day(listOf(
         null, 
         null,
@@ -154,4 +159,4 @@ val exampleSchedule = Schedule(
         Schedule.Lesson("WR", "MAIR", "K3"),
         Schedule.Lesson("Phi", "STEH", "K5"),
     )),
-)
+)*/

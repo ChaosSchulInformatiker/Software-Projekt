@@ -12,11 +12,21 @@ class Table <P> internal constructor(
 ) {
     val tableName = "`$schemaName`.`$name`"
 
-    val columns get() = runCatching {
+    val columns get() = runCatching<List<String>> {
         val rs = stmt.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'schedule' && TABLE_NAME = 'mon'")
         val data = mutableListOf<String>()
         while (rs.next()) {
             data.add(rs.getObject("COLUMN_NAME") as String)
+        }
+        data
+    }
+
+    @get:Suppress("unchecked_cast")
+    val keys get() = runCatching<List<P>> {
+        val rs = stmt.query("SELECT `$primaryKeyName` FROM $tableName")
+        val data = mutableListOf<P>()
+        while (rs.next()) {
+            data.add(rs.getObject(primaryKeyName) as P)
         }
         data
     }
