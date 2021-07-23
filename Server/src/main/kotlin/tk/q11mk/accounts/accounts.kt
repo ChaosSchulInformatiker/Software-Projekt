@@ -20,23 +20,21 @@ private class VCValue(
     val code: Int
 )
 
-suspend fun CoroutineScope.sendCode(firstName: String, lastName: String): RegisterResponse {
-    var email: String? = null
+suspend fun CoroutineScope.sendCode(firstName: String, lastName: String, email: String): RegisterResponse {
+    //var email: String? = null
     val code = generateCode()
     val valid = try {
-        email = getEmailAccount(firstName, lastName)
+        //email = getEmailAccount(firstName, lastName)
         Mail.sendEmail(senderEmail, email, senderPassword, firstName, code)
         true
-    } catch (e: EmailTransformException) {
-        false
     } catch (e: MessagingException) {
         false
     }
     if (valid) {
-        verificationCache[email!!] = VCValue(firstName, lastName, code)
+        verificationCache[email] = VCValue(firstName, lastName, code)
         removeFromVCC(this, email)
     }
-    return RegisterResponse(email, valid && email != null)
+    return RegisterResponse(email, valid)
 }
 
 @Serializable
@@ -122,32 +120,6 @@ private suspend fun removeFromVCC(c: CoroutineScope, key: String) {
 
 private val senderEmail = getSecretProperty("email_address")
 private val senderPassword = getSecretProperty("email_password")
-
-fun getEmailAccount(firstName: String, lastName: String) = buildString {
-    for (c in firstName)
-        appendTransformedChar(c)
-    append('.')
-    for (c in lastName)
-        appendTransformedChar(c)
-    append("@maristenkolleg.de")
-}
-
-private fun StringBuilder.appendTransformedChar(c: Char) {
-    when(c) {
-        in capitalLetters -> append(c + 0x20)
-        in lowercaseLetters -> append(c)
-        'ä', 'Ä' -> append("ae")
-        'ö', 'Ö' -> append("oe")
-        'ü', 'Ü' -> append("ue")
-        'ß' -> append("ss")
-        else -> throw EmailTransformException
-    }
-}
-
-private object EmailTransformException : Throwable()
-
-private val capitalLetters = 'A'..'Z'
-private val lowercaseLetters = 'a'..'z'
 
 fun changeClassData(id: String, clazz: String, subjectsCSV: String): ChangeClassDataResponse = try {
     if (accountClassesTable.has(id)) {

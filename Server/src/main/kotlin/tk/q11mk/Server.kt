@@ -41,13 +41,14 @@ fun main() {
             get("/register") {
                 val firstName = call.request.queryParameters["first_name"]
                 val lastName = call.request.queryParameters["last_name"]
+                val email = call.request.queryParameters["e_mail"]
 
-                if (firstName == null || lastName == null) {
+                if (firstName == null || lastName == null || email == null) {
                     call.respond400()
                     return@get
                 }
 
-                call.response(sendCode(firstName, lastName))
+                call.response(sendCode(firstName, lastName, email))
             }
 
             get("/login") {
