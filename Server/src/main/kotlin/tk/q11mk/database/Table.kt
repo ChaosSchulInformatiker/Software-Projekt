@@ -1,6 +1,7 @@
 package tk.q11mk.database
 
 import java.sql.ResultSet
+import java.sql.SQLSyntaxErrorException
 import java.sql.Statement
 
 class Table <P> internal constructor(
@@ -61,7 +62,9 @@ class Table <P> internal constructor(
 
     @Suppress("unchecked_cast")
     fun <C> getLike(column: String, like: String) = runCatching<List<Pair<P, C>>> {
-        val rs = stmt.query("SELECT `$primaryKeyName`, `$column` FROM $tableName WHERE `$column` LIKE '$like'")
+        val rs = try {
+            stmt.query("SELECT `$primaryKeyName`, `$column` FROM $tableName WHERE `$column` LIKE '$like'")
+        } catch (e: SQLSyntaxErrorException) { return@runCatching listOf() }
         val data = mutableListOf<Pair<P, C>>()
         while (rs.next()) {
             data.add(rs.getObject(primaryKeyName) as P to rs.getObject(column) as C)
