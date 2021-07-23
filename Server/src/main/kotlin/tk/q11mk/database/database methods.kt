@@ -7,6 +7,12 @@ val database = Database(getSecretProperty("db_url"), getSecretProperty("db_usern
 val schedulesSchema = database.getSchema("schedules").getOrElse { database.createSchema("schedules").getOrThrow() }
 
 fun getScheduleTable(dayIndex: Int) = schedulesSchema.getTable<Int>(dayIndex.toString()).getOrElse { schedulesSchema.createTable(dayIndex.toString(), "lesson" to DataType.INT).getOrThrow() }
+
+/**
+ * Gets the lesson content.
+ * Day is 0-based: 0 is monday, 4 is friday
+ * Lesson is 1-based: 1-6 correspond to lesson no. 1-6, 7 is MP, 8-11 are 7-10
+ */
 fun getLesson(dayIndex: Int, lesson: Int, teacher: String) = getScheduleTable(dayIndex).get<String>(lesson, teacher).getOrNull()
 
 val constantsSchema = database.getSchema("constants").getOrElse { database.createSchema("constants").getOrThrow() }
