@@ -3,14 +3,17 @@ package tk.q11mk.schedule
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.Json
+import tk.q11mk.database.getScheduleTable
 
 @Serializable(with = Schedule.Serializer::class)
-data class Schedule(
+data class Schedule @Deprecated("Use Day") constructor(
     val mo: Day,
     val tu: Day,
     val we: Day,
@@ -29,6 +32,41 @@ data class Schedule(
     @Serializable
     data class Day(
         val lessons: List<Lesson?>
+    ) {
+        companion object {
+            val csvSplitRegex = Regex(",\\s*")
+
+            fun fromRequest(dayIndex: Int, clazz: String, subjectsCSV: String): Day {
+                val subjects = subjectsCSV.split(csvSplitRegex)
+
+                val dayTable = getScheduleTable(dayIndex)
+
+                val teachers = dayTable.columns.getOrThrow()
+                teachers.remove("id")
+
+                val lessons = mutableListOf<Lesson?>()
+
+                for (t in teachers) {
+                    val likes = dayTable.getLike<String>(t, """%"class"%:%"$clazz"%""").getOrThrow()
+                    for (l in likes) {
+                        val desJ = Json.decodeFromString(DBLesson.serializer(), l.second)
+                        if (desJ.subject in subjects) {
+                            while (l.first > lessons.size) lessons.add(null)
+                            lessons[l.first - 1] = Lesson(desJ.subject, t, desJ.room)
+                        }
+                    }
+                }
+
+                return Day(lessons)
+            }
+        }
+    }
+
+    @Serializable
+    data class DBLesson(
+        @SerialName("class") val clazz: String,
+        val subject: String,
+        val room: String? = null
     )
 
     @Serializable

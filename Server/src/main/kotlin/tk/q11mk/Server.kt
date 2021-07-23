@@ -23,16 +23,17 @@ fun main() {
 
         routing {
             get("/schedule") {
-                val day = call.request.queryParameters["day"]?.toIntOrNull()
+                val dayIndex = call.request.queryParameters["day"]?.toIntOrNull()
                 val clazz = call.request.queryParameters["class"]
                 val subjectsCSV = call.request.queryParameters["subjects"]
 
-                if (day == null || clazz == null || subjectsCSV == null) {
+                if (dayIndex == null || clazz == null || subjectsCSV == null) {
                     call.respond400()
                     return@get
                 }
 
-                call.response(exampleSchedule[day])
+                //call.response(exampleSchedule[day])
+                call.response(Schedule.Day.fromRequest(dayIndex, clazz, subjectsCSV))
             }
 
             get("/register") {

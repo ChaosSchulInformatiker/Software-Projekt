@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:maristen_planer/utils.dart';
 
-const apiRoot = 'https://www.loens2.com/maristenplaner';
+const apiRoot = 'http://localhost:8000';//'https://www.loens2.com/maristenplaner';
 
 Future<Json> fetchSchedule(int dayIndex, String clazz, List<String> subjects) async {
   print('Fetch schedule');

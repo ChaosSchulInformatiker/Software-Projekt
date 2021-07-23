@@ -11,6 +11,15 @@ class Table <P> internal constructor(
 ) {
     val tableName = "`$schemaName`.`$name`"
 
+    val columns get() = runCatching {
+        val rs = stmt.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'schedule' && TABLE_NAME = 'mon'")
+        val data = mutableListOf<String>()
+        while (rs.next()) {
+            data.add(rs.getObject("COLUMN_NAME") as String)
+        }
+        data
+    }
+
     fun insertRow(data: List<Any?>) = runCatching<Unit> {
         stmt.run("INSERT INTO $tableName VALUES (${data.joinToString { it.toSqlData() }})")
     }
@@ -48,6 +57,16 @@ class Table <P> internal constructor(
     @Suppress("unchecked_cast")
     fun <C> get(primaryKey: P, column: String) = runCatching<C> {
         stmt.query("SELECT `$column` FROM $tableName WHERE `$primaryKeyName`=$primaryKey").apply(ResultSet::next).getObject(column) as C
+    }
+
+    @Suppress("unchecked_cast")
+    fun <C> getLike(column: String, like: String) = runCatching<List<Pair<P, C>>> {
+        val rs = stmt.query("SELECT `$primaryKeyName`, `$column` FROM $tableName WHERE `$column` LIKE '$like'")
+        val data = mutableListOf<Pair<P, C>>()
+        while (rs.next()) {
+            data.add(rs.getObject(primaryKeyName) as P to rs.getObject(column) as C)
+        }
+        data
     }
 
     fun <T> renameColumn(column: String, name: String, type: DataType<T>) = runCatching {
