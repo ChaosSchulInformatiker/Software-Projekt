@@ -72,10 +72,6 @@ Widget _buildSchedule(State state, List<dynamic> lessons) {
   print(dayOfSchedule(_scheduleDay));
   return Column(
     children: <Widget>[
-      Text(
-        dayOfSchedule(_scheduleDay),
-        style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: maristenBlue),
-      ),
       Row(
         children: <Widget>[
           GestureDetector(
@@ -86,20 +82,24 @@ Widget _buildSchedule(State state, List<dynamic> lessons) {
               _refresh(state);
             },
           ),
-          GestureDetector(
-            child: table,
-            onHorizontalDragEnd: (details) {
-              if (details.primaryVelocity!.abs() < 0.1) return;
-              if (details.primaryVelocity! > 0) _decSD(state);
-              else _incSD(state);
-            },
+          Text(
+            dayOfSchedule(_scheduleDay),
+            style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: maristenBlueLight),
           ),
           GestureDetector(
             child: const Icon(Icons.chevron_right),
             onTap: () => _incSD(state),
           )
         ],
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      ),
+      GestureDetector(
+        child: table,
+        onHorizontalDragEnd: (details) {
+          if (details.primaryVelocity!.abs() < 0.1) return;
+          if (details.primaryVelocity! > 0) _decSD(state);
+          else _incSD(state);
+        },
       ),
       //table
     ],

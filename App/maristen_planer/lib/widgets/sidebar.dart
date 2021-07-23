@@ -47,7 +47,7 @@ class SideDrawer extends StatelessWidget {
           ),
           AboutListTile(
             icon: const Icon(Icons.info),
-            applicationIcon: const FlutterLogo(),
+            applicationIcon: FlutterLogo(),
             applicationName: 'MaristenPlaner',
             applicationVersion: 'Dev Build July 2021',
             applicationLegalese: '\u{a9} 2021 MaristenPlaner Team',

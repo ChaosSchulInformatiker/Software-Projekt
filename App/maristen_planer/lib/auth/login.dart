@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:maristen_planer/auth/authentification.dart';
 import 'package:maristen_planer/constants.dart';
@@ -104,6 +105,31 @@ class _LoginScreenState  extends State<LoginScreen> {
                 },
               )
             ),
+            Container(
+              padding: EdgeInsets.all(30),
+                child: Align(
+                    alignment: Alignment.center,
+                    child: RichText(
+                        text: new TextSpan(
+                            children: [
+                              new TextSpan(
+                                text: 'Durch den Login akzeptieren sie unsere ',
+                                style: new TextStyle(color: Colors.grey),
+
+                              ),
+                              new TextSpan(
+                                  text: 'Nutzungs- & Datenschutzbedingungen.',
+                                  style: new TextStyle(color: Colors.blue),
+                                  recognizer: new TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.pop(context);
+                                    }
+                              ),
+                            ]
+                        )
+                    )
+                )
+            )
           ],
         ),
       ),

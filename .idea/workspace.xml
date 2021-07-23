@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4590cca0-e72a-4fd5-a694-1564a1e1c431" name="Default Changelist" comment="" />
+    <list default="true" id="4590cca0-e72a-4fd5-a694-1564a1e1c431" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/Software-Projekt.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Software-Projekt.iml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -37,9 +39,10 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="463" y="119" key="FileChooserDialogImpl" timestamp="1625082926012">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state x="651" y="172" key="FileChooserDialogImpl" timestamp="1626170446435">
+      <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="463" y="119" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1625082926012" />
+    <state x="651" y="172" key="FileChooserDialogImpl/0.0.1920.1050@0.0.1920.1050" timestamp="1626170446435" />
   </component>
 </project>
