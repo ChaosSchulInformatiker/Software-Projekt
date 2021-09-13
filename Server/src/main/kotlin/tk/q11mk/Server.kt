@@ -48,6 +48,11 @@ fun main() {
                     return@get
                 }
 
+                if (!email.endsWith("@maristenkolleg.de")) {
+                    call.respond400()
+                    return@get
+                }
+
                 call.response(sendCode(firstName, lastName, email))
             }
 
