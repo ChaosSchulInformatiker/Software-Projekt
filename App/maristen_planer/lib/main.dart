@@ -11,16 +11,18 @@ import 'package:maristen_planer/widgets/mensaplan.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   settings.length; // Load settings
-  int id = await getAccountId();
+  id = await getAccountId();
   final themeMode = themeDataOfMode(await settings[0].settings[0].getValue());
   print(themeMode);
   runApp(MaterialApp(
     theme: darkTheme,
     darkTheme: darkTheme,
     themeMode: themeMode,
-    home: id == -1 ? MyApp() : MyApp(),
+    home: id == -1 ? LoginScreen() : MyApp(),
   ));
 }
+
+int id = -1;
 
 final MyApp app = MyApp();
 
@@ -60,6 +62,8 @@ class _MyAppState extends State<MyApp> {
   Widget _body() {
     switch (_selectedIndex) {
       case 0:
+        return scheduleWidget(this);
+      case 1:
         return Mensaplan();
     }
     return Text('Not implemented yet', style: TextStyle(color: Colors.amber));

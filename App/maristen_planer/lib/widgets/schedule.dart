@@ -109,7 +109,7 @@ Widget _buildSchedule(State state, List<dynamic> lessons) {
 late Future<Json> schedule;
 
 void initSchedule() {
-  schedule = fetchSchedule(_scheduleDay-1, '7A', ['D', 'M' , 'E', 'F']);
+  schedule = _fetchSchedule();
 }
 
 Widget? _widget;
@@ -159,8 +159,10 @@ Widget scheduleWidget(State state) =>
     );
 
 void _refresh(State state) async {
-  await (schedule = fetchSchedule(_scheduleDay-1, '7A', ['D', 'M' , 'E', 'F']));
+  await (schedule = _fetchSchedule());
   state.setState(() {
     _widget = null;
   });
 }
+
+_fetchSchedule() => fetchSchedule(_scheduleDay-1, '8a', ['c']);

@@ -20,7 +20,7 @@ ext {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.10"
-    testImplementation "org.jetbrains.kotlin:kotlin-script-runtime:1.5.10"
+    //testImplementation "org.jetbrains.kotlin:kotlin-script-runtime:1.5.10"
 
     implementation "io.ktor:ktor-server-core:$ktorVersion"
     implementation "io.ktor:ktor-server-cio:$ktorVersion"
