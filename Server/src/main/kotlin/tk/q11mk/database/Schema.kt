@@ -1,8 +1,5 @@
 package tk.q11mk.database
 
-import org.intellij.lang.annotations.Language
-import java.sql.ResultSet
-import java.sql.SQLException
 import java.sql.Statement
 
 class Schema internal constructor(val name: String, private val stmt: Statement) {
@@ -16,16 +13,14 @@ class Schema internal constructor(val name: String, private val stmt: Statement)
      *
      * @author Simon
      */
-    fun <P> createTable(name: String, primaryKey: Pair<String, DataType<P>>, vararg columns: Pair<String, DataType<*>>) = runCatching {
+    fun createTable(name: String, vararg columns: Pair<String, DataType<*>>) = runCatching {
         stmt.run(buildString {
             append("CREATE TABLE `")
             append(this@Schema.name)
             append("`.`")
             append(name)
             append("` (`")
-            append(primaryKey.first)
             append("` ")
-            append(primaryKey.second.notNull())
             append(", ")
             for ((c, t) in columns) {
                 append('`')
@@ -33,12 +28,12 @@ class Schema internal constructor(val name: String, private val stmt: Statement)
                 append("` ")
                 append(t)
                 append(", ")
-            }
+            }/*
             append("PRIMARY KEY (`")
             append(primaryKey.first)
-            append("`));")
+            append("`));")*/
         })
-        Table<P>(name, primaryKey.first, this.name, stmt)
+        Table(name, this.name, stmt)
     }
 
     /*fun <P> createTable(name: String, pkName: String, type: Table.Column.Type<P>, vararg flags: String = arrayOf("NOT NULL", "AUTO_INCREMENT")) = try {
@@ -53,9 +48,14 @@ PRIMARY KEY (`$pkName`));"""
         Result.failure(e)
     }*/
 
-    fun <P> getTable(name: String): Result<Table<P>> = runCatching {
-        Table(name, stmt.query("SHOW KEYS FROM `${this.name}`.`$name` WHERE Key_name = 'PRIMARY'").apply(ResultSet::next).getString("Column_name"), this.name, this.stmt)
-    }
+    fun getTable(name: String): Result<Table> = runCatching {
+        //stmt.query("SHOW KEYS FROM `${this.name}`.`$name` WHERE Key_name = 'PRIMARY'").apply(ResultSet::next).getString("Column_name"),
+        Table(name, this.name, this.stmt)
+    }/*.also {
+        it.onFailure {
+            it.printStackTrace()
+        }
+    }*/
 
     fun deleteTable(name: String) = runCatching<Unit> {
         stmt.run("DROP TABLE `${this.name}`.`$name`")

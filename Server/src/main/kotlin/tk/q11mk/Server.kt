@@ -82,7 +82,7 @@ fun main() {
             }
 
             get("/get_all_classes") {
-                call.response(*classesTable.keys.getOrDefault(emptyList()).toTypedArray())
+                call.response(*classesTable.getColumn("nameId").getOrDefault(emptyList()).toTypedArray())
             }
         }
     }.start(wait = true)
