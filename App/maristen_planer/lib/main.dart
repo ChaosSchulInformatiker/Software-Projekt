@@ -6,6 +6,7 @@ import 'package:maristen_planer/settings.dart';
 import 'package:maristen_planer/utils.dart';
 import 'package:maristen_planer/widgets/schedule.dart';
 import 'package:maristen_planer/widgets/sidebar.dart';
+import 'package:maristen_planer/widgets/mensaplan.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +18,7 @@ Future<void> main() async {
     theme: darkTheme,
     darkTheme: darkTheme,
     themeMode: themeMode,
-    home: id == -1 ? LoginScreen() : MyApp(),
+    home: id == -1 ? MyApp() : MyApp(),
   ));
 }
 
@@ -59,7 +60,7 @@ class _MyAppState extends State<MyApp> {
   Widget _body() {
     switch (_selectedIndex) {
       case 0:
-        return scheduleWidget(this);
+        return Mensaplan();
     }
     return Text('Not implemented yet', style: TextStyle(color: Colors.amber));
   }
@@ -101,10 +102,6 @@ class _MyAppState extends State<MyApp> {
         BottomNavigationBarItem(
           icon: Icon(Icons.restaurant_menu),
           label: 'Mensaplan',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.event_busy),
-          label: 'Vertretungsplan',
         ),
       ],
       currentIndex: _selectedIndex,

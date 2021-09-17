@@ -100,7 +100,7 @@ class _LoginScreenState  extends State<LoginScreen> {
                   //getEmailAccount(fNameController.text, lNameController.text);
                   //print(eMail);
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => AuthentificationScreen(registerRequest(fNameController.text, lNameController.text))
+                      builder: (BuildContext context) => AuthentificationScreen(registerRequest(fNameController.text, lNameController.text, eMailController.text))
                   ));
                 },
               )
