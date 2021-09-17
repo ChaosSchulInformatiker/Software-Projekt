@@ -139,7 +139,7 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Document"),
+        title: Text("Mensaplan"),
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.share),
