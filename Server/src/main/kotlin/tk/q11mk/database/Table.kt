@@ -31,10 +31,19 @@ class Table internal constructor(
     }*/
 
     fun getColumn(name: String) = runCatching {
-        val rs = stmt.query("SELECT `$name` FROM `$tableName`")
+        val rs = stmt.query("SELECT `$name` FROM $tableName")
         val data = mutableListOf<Any>()
         while (rs.next()) {
             data.add(rs.getObject(name))
+        }
+        data
+    }
+
+    fun getColumns(vararg names: String) = runCatching {
+        val rs = stmt.query("SELECT ${names.joinToString("`,`", "`", "`")} FROM $tableName")
+        val data = mutableListOf<List<Any>>()
+        while (rs.next()) {
+            data.add(names.map { rs.getObject(it) })
         }
         data
     }

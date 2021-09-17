@@ -38,6 +38,19 @@ fun main() {
                 call.response(Schedule.Day.fromRequest(dayIndex, clazz, subjectsCSV))
             }
 
+            get("/classes") {
+                //'{inf=Informatik, b=Biologie, c=Chemie, sw=Sport weiblich, d=Deutsch, e=Englisch, g=Geschichte, mu=Musik, ku=Kunsterziehung, L=Latein, m=Mathematik, geo=Erdkunde, ev=Evang.Rel., cue=null, ph=Physik, eth=Ethik, sk=Sozialkunde, rk=Kath.Rel., sm=Sport männlich, wr=Wirtschaft, phue=null}'
+
+                call.response(*(classesTable.getColumns("nameId", "subjects").getOrThrow().let { l ->
+                    Array(l.size) { i ->
+                        ClassResponse(l[i][0].toString(), l[i][1].toString().let { s ->
+                            s.substring(1, s.length - 1).split(", ").takeIf { it.size > 2 }
+                                ?.associate { it.split("=").let { t -> if(t.size != 2) println(s); t[0] to t[1] } } ?: emptyMap()
+                        })
+                    }
+                }))
+            }
+
             get("/register") {
                 val firstName = call.request.queryParameters["first_name"]
                 val lastName = call.request.queryParameters["last_name"]
@@ -80,10 +93,6 @@ fun main() {
 
                 call.response(changeClassData(id, clazz, subjects))
             }
-
-            get("/get_all_classes") {
-                call.response(*classesTable.getColumn("nameId").getOrDefault(emptyList()).toTypedArray())
-            }
         }
     }.start(wait = true)
 }
@@ -103,6 +112,12 @@ class Response<T>(
 }
 
 val Code400 get() = Response<String>(400, emptyArray())
+
+@Serializable
+class ClassResponse(
+    val name: String,
+    val subjects: Map<String, String>
+)
 
 /*val exampleSchedule = Schedule(
     Schedule.Day(listOf(
