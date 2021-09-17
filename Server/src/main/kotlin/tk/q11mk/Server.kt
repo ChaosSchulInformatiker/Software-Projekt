@@ -14,6 +14,7 @@ import tk.q11mk.accounts.changeClassData
 import tk.q11mk.accounts.receiveCode
 import tk.q11mk.accounts.sendCode
 import tk.q11mk.database.classesTable
+import tk.q11mk.database.getAccountFromId
 import tk.q11mk.schedule.Schedule
 import tk.q11mk.utils.getPublicProperty
 
@@ -28,11 +29,17 @@ fun main() {
                 val dayIndex = call.request.queryParameters["day"]?.toIntOrNull()
                 val clazz = call.request.queryParameters["class"]
                 val subjectsCSV = call.request.queryParameters["subjects"]
+                val authorization = call.request.headers["Authorization"]?.toLongOrNull()
 
                 if (dayIndex == null || clazz == null || subjectsCSV == null) {
                     call.respond400()
                     return@get
                 }
+                if (authorization == null || getAccountFromId(authorization) == null) {
+                    call.respond403()
+                    return@get
+                }
+
 
                 //call.response(exampleSchedule[day])
                 call.response(Schedule.Day.fromRequest(dayIndex, clazz, subjectsCSV))
@@ -40,6 +47,12 @@ fun main() {
 
             get("/classes") {
                 //'{inf=Informatik, b=Biologie, c=Chemie, sw=Sport weiblich, d=Deutsch, e=Englisch, g=Geschichte, mu=Musik, ku=Kunsterziehung, L=Latein, m=Mathematik, geo=Erdkunde, ev=Evang.Rel., cue=null, ph=Physik, eth=Ethik, sk=Sozialkunde, rk=Kath.Rel., sm=Sport männlich, wr=Wirtschaft, phue=null}'
+                val authorization = call.request.headers["Authorization"]?.toLongOrNull()
+
+                if (authorization == null || getAccountFromId(authorization) == null) {
+                    call.respond403()
+                    return@get
+                }
 
                 call.response(*(classesTable.getColumns("nameId", "subjects").getOrThrow().let { l ->
                     Array(l.size) { i ->
@@ -102,6 +115,7 @@ suspend inline fun <reified T> ApplicationCall.response(vararg values: T) {
     respond(Response(200, values))
 }
 suspend inline fun ApplicationCall.respond400() = respond(Code400)
+suspend inline fun ApplicationCall.respond403() = respond(Code403)
 
 @Serializable
 class Response<T>(
@@ -112,6 +126,7 @@ class Response<T>(
 }
 
 val Code400 get() = Response<String>(400, emptyArray())
+val Code403 get() = Response<String>(403, emptyArray())
 
 @Serializable
 class ClassResponse(
