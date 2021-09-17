@@ -18,7 +18,7 @@ Future<void> main() async {
     theme: darkTheme,
     darkTheme: darkTheme,
     themeMode: themeMode,
-    home: id == -1 ? MyApp() : MyApp(),
+    home: id == -1 ? LoginScreen() : MyApp(),
   ));
 }
 
