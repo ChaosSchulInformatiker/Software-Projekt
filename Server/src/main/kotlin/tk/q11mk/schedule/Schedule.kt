@@ -10,6 +10,7 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
+import tk.q11mk.database.Table
 import tk.q11mk.database.getScheduleTable
 
 @Serializable(with = Schedule.Serializer::class)
@@ -35,6 +36,7 @@ data class Schedule @Deprecated("Use Day") constructor(
     ) {
         companion object {
             val csvSplitRegex = Regex(",\\s*")
+            val visonRegex = Regex("""","|":"""")
 
             fun fromRequest(dayIndex: Int, clazz: String, subjectsCSV: String): Day {
                 val subjects = subjectsCSV.split(csvSplitRegex)
@@ -42,19 +44,13 @@ data class Schedule @Deprecated("Use Day") constructor(
                 val dayTable = getScheduleTable(dayIndex)
 
                 val teachers = dayTable.columns.getOrThrow().toMutableList()
-                teachers.remove("id")
+                teachers.remove("hour")
 
                 val lessons = mutableListOf<Lesson?>()
 
                 for (t in teachers) {
-                    val likes = dayTable.getLike<String>(t, """%"class"%:%"$clazz"%""").getOrThrow()
-                    for (l in likes) {
-                        val desJ = Json.decodeFromString(DBLesson.serializer(), l.second)
-                        if (desJ.subject in subjects) {
-                            while (l.first > lessons.size) lessons.add(null)
-                            lessons[l.first - 1] = Lesson(desJ.subject, t, desJ.room)
-                        }
-                    }
+                    becauseVisarIsIncompetent(dayTable, t, subjects, lessons, """%"class":"[%$clazz]"%""")
+                    becauseVisarIsIncompetent(dayTable, t, subjects, lessons, """%"class":"[%$clazz,%]"%""")
                 }
 
                 return Day(lessons)
@@ -66,12 +62,16 @@ data class Schedule @Deprecated("Use Day") constructor(
     data class DBLesson(
         @SerialName("class") val clazz: String,
         val subject: String,
-        val room: String? = null
+        val room: String? = null,
+        val substituted: Boolean = false,
+        val substitute_teacher: String? = null,
+        val substitute_room: String? = null,
     )
 
     @Serializable
     data class Lesson(
         val subject: String,
+        val substituted: Boolean,
         val teacher: String,
         val room: String?
     )
@@ -95,5 +95,22 @@ data class Schedule @Deprecated("Use Day") constructor(
     @SerialName("Schedule")
     private class ScheduleSurrogate(@Suppress("unused") val days: Array<Day>) {
         init { require(days.size == 5) }
+    }
+}
+
+fun becauseVisarIsIncompetent(dayTable: Table, t: String, subjects: List<String>, lessons: MutableList<Schedule.Lesson?>, like: String) {
+    val likes = dayTable.getLike<String>(t, like, "hour").getOrThrow()
+    for (l in likes) {
+        val split = l.second.substring(1, l.second.length - 1).split(Schedule.Day.visonRegex)
+        val subject = split[5] + (split[7].takeUnless { it =="0" } ?: "")
+        if (subject !in subjects) continue
+        while (l.first.toString().toInt() > lessons.size) lessons.add(null)
+        val substituted = split[11].toBoolean()
+        lessons[l.first.toString().toInt() - 1] = Schedule.Lesson(
+            subject,
+            substituted,
+            if (substituted) split[13] else t,
+            if (substituted) split[15] else split[9]
+        )
     }
 }

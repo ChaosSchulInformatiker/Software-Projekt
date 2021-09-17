@@ -23,9 +23,10 @@ fun main() {
         .insertRow(listOf(1, """{"class": "7A"}""")).getOrThrow()*/
 
     //getScheduleTable(0).set("SCHN", 1, """{"class":"7A","subject":"M"}""")
-    //println(getLesson(0, 1, "SCHN"))
+    //getScheduleTable(1).set("POHL", 5, """{"class":"7A","teacher":"POHL","subject":"Inf","room":"E209","substituted":true,"substitute_teacher":"SCHN","substitute_room":"E209"}""").getOrThrow()
+    //println(Schedule.Day.fromRequest(1, "7A", "Inf, M, D"))
 
-    //println(getScheduleTable(0).getLike<String>("SCHN", """%"class"%:%"7A"%"""))
+    //println(getScheduleTable(1).getLike<String>("POHL", """%"class"%:%"7A"%"""))
 
     //Schedule.Day.fromRequest(0, "7A", "D,E,M,F")
 

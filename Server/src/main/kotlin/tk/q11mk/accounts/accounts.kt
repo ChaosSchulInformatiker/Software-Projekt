@@ -59,12 +59,13 @@ fun receiveCode(email: String, code: Int): LoginResponse {
     var clazz: String? = null
     var subjectsCSV: String? = null
 
-    val emailUse = idsTable.getLike<String>("email", email).getOrThrow()
+    val emailUse = idsTable.getLike<String>("email", email, "id").getOrThrow()
     println(emailUse)
+    println(status)
     when (emailUse.size) {
         0 -> idsTable.insertRow(listOf(getId(status), vcValue!!.lastName, vcValue.firstName, email, false)).getOrThrow()
         1 -> {
-            id = emailUse[0].first.toLong()
+            id = emailUse[0].first.toString().toLong()
             val account = getAccountFromId(id!!)!!
             if (account.lastName != vcValue!!.lastName || account.firstName != vcValue.firstName) {
                 status = LoginResponse.Status.UNEQUAL_DATA
@@ -122,9 +123,9 @@ private val senderEmail = getSecretProperty("email_address")
 private val senderPassword = getSecretProperty("email_password")
 
 fun changeClassData(id: String, clazz: String, subjectsCSV: String): ChangeClassDataResponse = try {
-    if (accountClassesTable.has(id)) {
-        accountClassesTable.set("class", id, clazz).getOrThrow()
-        accountClassesTable.set("subjects", id, subjectsCSV).getOrThrow()
+    if (accountClassesTable.has("id" to id)) {
+        accountClassesTable.set("class", "id" to id, clazz).getOrThrow()
+        accountClassesTable.set("subjects", "id" to id, subjectsCSV).getOrThrow()
     } else {
         accountClassesTable.insertRow(listOf(id, clazz, subjectsCSV)).getOrThrow()
     }
