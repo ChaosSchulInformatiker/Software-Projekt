@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:maristen_planer/constants.dart';
 import 'package:maristen_planer/properties.dart';
-import '../main.dart';
+import 'package:maristen_planer/widgets/classselection.dart';
 import '../utils.dart';
 
 class VerificationScreen extends StatefulWidget {
@@ -23,13 +23,13 @@ class _VerificationScreenState extends State<VerificationScreen> {
       case "SUCCESS":
         print(id);
         saveAccountId(id!);
-        WidgetsBinding.instance?.addPostFrameCallback((_) => _proceedToHome());
+        WidgetsBinding.instance?.addPostFrameCallback((_) => _proceedToSelection());
         return Column(children: <Widget>[
           Text('Login erfolgreich! Sie werden in Kürze weitergeleitet.',),
           Text('Alternativ drücken Sie bitte diesen Button:'),
           ElevatedButton(
             child: Text('Weiter'),
-            onPressed: _proceedToHome
+            onPressed: _proceedToSelection
           )
         ]);
       case "WRONG_CODE":
@@ -40,9 +40,9 @@ class _VerificationScreenState extends State<VerificationScreen> {
     return Text('...');
   }
 
-  void _proceedToHome() {
+  void _proceedToSelection() {
     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-        builder: (BuildContext context) => MyApp()
+        builder: (BuildContext context) => ClassSelection()
     ), (route) => false);
   }
 
