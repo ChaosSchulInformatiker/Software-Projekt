@@ -158,7 +158,11 @@ class _LoginScreenState  extends State<LoginScreen> {
                               ),
                               new TextSpan(
                                   text: 'Nutzungs- & Datenschutzbedingungen.',
-                                  style: new TextStyle(color: Colors.blue),
+                                  style: new TextStyle(
+                                      color: Colors.blue,
+                                      decoration: TextDecoration.underline,
+                                      decorationColor: Colors.blue,
+                                  ),
                                   recognizer: new TapGestureRecognizer()
                                     ..onTap = () {
                                       if (pathPDF.isNotEmpty) {
