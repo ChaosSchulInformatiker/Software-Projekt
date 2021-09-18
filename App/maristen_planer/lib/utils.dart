@@ -3,6 +3,7 @@ import 'package:maristen_planer/settings.dart';
 
 int todayIndex() => DateTime.now().weekday;
 
+
 int scheduleTodayIndex() {
   int ti = todayIndex();
   if (ti >= DateTime.saturday) return 0;
@@ -11,6 +12,7 @@ int scheduleTodayIndex() {
 
 String dayOfScheduleToday() => dayOfSchedule(todayIndex());
 String dayOfSchedule(int index) {
+  ++index;
   switch (index) {
     case DateTime.monday:
     case DateTime.saturday:

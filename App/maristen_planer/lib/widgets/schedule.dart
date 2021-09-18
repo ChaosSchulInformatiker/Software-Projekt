@@ -78,7 +78,7 @@ Widget _buildSchedule(State state, List<dynamic> lessons) {
             child: const Icon(Icons.chevron_left),
             onTap: () {
               --_scheduleDay;
-              if (_scheduleDay < 1) _scheduleDay = 5;
+              if (_scheduleDay < 1) _scheduleDay = 4;
               _refresh(state);
             },
           ),
@@ -114,16 +114,16 @@ void initSchedule() {
 
 Widget? _widget;
 
-int _scheduleDay = todayIndex();
+int _scheduleDay = scheduleTodayIndex();
 void _decSD(State state) {
   --_scheduleDay;
-  if (_scheduleDay < 1 || _scheduleDay > 5) _scheduleDay = 5;
+  if (_scheduleDay < 0 || _scheduleDay > 4) _scheduleDay = 4;
   _refresh(state);
 }
 void _incSD(State state) {
   ++_scheduleDay;
-  if (_scheduleDay == 6) _scheduleDay = 1;
-  else if (_scheduleDay > 6) _scheduleDay = 2;
+  if (_scheduleDay == 5) _scheduleDay = 0;
+  else if (_scheduleDay > 5) _scheduleDay = 1;
   _refresh(state);
 }
 
@@ -165,4 +165,4 @@ void _refresh(State state) async {
   });
 }
 
-_fetchSchedule() => fetchSchedule(_scheduleDay-1, '8a', ['c']);
+_fetchSchedule() => fetchSchedule(_scheduleDay, '8a', ['b','c','iL','d','sw','eI','di','g','mu','ku','L','m','geo','ev','ph','eth','rk','mi']);

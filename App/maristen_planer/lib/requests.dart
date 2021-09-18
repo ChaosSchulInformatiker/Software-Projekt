@@ -19,9 +19,12 @@ Future<Json> registerRequest(String fName, String lName, String eMail) async => 
 Future<Json> loginRequest(String email, String code) async => request('/login?e_mail=$email&code=$code');
 
 Future<Json> request(String subAddress) async {
+  print(subAddress);
   final response = await http.get(Uri.parse('$apiRoot$subAddress'), headers: {
     'Authorization': '$id'
   });
+  print(response.body);
+  print(response.statusCode);
   if (response.statusCode == 200) {
     return jsonDecode(response.body);
   } else {
