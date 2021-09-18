@@ -1,10 +1,15 @@
-import 'dart:io';
+
 
 import 'package:flutter/material.dart';
 import 'package:maristen_planer/constants.dart';
 import 'package:maristen_planer/utils.dart';
+import 'package:maristen_planer/widgets/classselection.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../requests.dart';
+
+String? clazz;
+String? subjects;
 
 // Für Kayra
 
@@ -17,6 +22,9 @@ Widget _buildSchedule(State state, List<dynamic> lessons) {
     if (lesson == null)
       rows.add(
           DataRow(
+              color: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+                return Colors.white10;
+              }),
               cells: <DataCell>[
                 DataCell(Text(li)),
                 DataCell(Text('-')),
@@ -32,20 +40,18 @@ Widget _buildSchedule(State state, List<dynamic> lessons) {
       if (teacher == "null") teacher = "Entfällt";
       if (room.endsWith('"')) room = room.substring(0, room.length - 1);
       if (room == 'null') room = '-';
-      rows.
-      add(
-          DataRow(
-              color: substituted ? MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-                return teacher == "Entfällt" ? Colors.green.shade900 : Colors.yellow.shade900;
-              }) : null,
-              cells: <DataCell>[
-                DataCell(Text(li)),
-                DataCell(Text(lesson['subject'])),
-                DataCell(Text(teacher)),
-                DataCell(Text(room)),
-              ]
-          )
+      final row = DataRow(
+          color: substituted ? MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+            return teacher == "Entfällt" ? Colors.green.shade900 : Colors.yellow.shade900;
+          }) : null,
+          cells: <DataCell>[
+            DataCell(Text(li)),
+            DataCell(Text(lesson['subject'])),
+            DataCell(Text(teacher)),
+            DataCell(Text(room)),
+          ]
       );
+      rows.add(row);
     }
   }
   final table = DataTable(
@@ -118,8 +124,8 @@ Widget _buildSchedule(State state, List<dynamic> lessons) {
 
 late Future<Json> schedule;
 
-void initSchedule() {
-  schedule = _fetchSchedule();
+void initSchedule(BuildContext context) {
+  schedule = _fetchSchedule(context);
 }
 
 Widget? _widget;
@@ -142,6 +148,7 @@ Widget scheduleWidget(State state) =>
     FutureBuilder<Json>(
         future: schedule,
         builder: (context, snapshot) {
+          print(snapshot);
           if (snapshot.hasData) {
             final List<dynamic> lessons = snapshot.data!['result'][0]['lessons']; //['days'][scheduleTodayIndex()]
 
@@ -169,10 +176,22 @@ Widget scheduleWidget(State state) =>
     );
 
 void _refresh(State state) async {
-  await (schedule = _fetchSchedule());
+  await (schedule = _fetchSchedule(state.context));
   state.setState(() {
     _widget = null;
   });
 }
 
-_fetchSchedule() => fetchSchedule(_scheduleDay, '8a', ['b','c','iL','d','sw','eI','di','g','mu','ku','L','m','geo','ev','ph','eth','rk','mi']);
+Future<Json> _fetchSchedule(BuildContext context) async {
+  final prefs = await SharedPreferences.getInstance();
+  clazz = prefs.getString('class');
+  subjects = prefs.getString('subjects');
+  if (clazz == null || subjects == null) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => ClassSelection()       //cs.ClassSelection()
+    ));
+    return fetchSchedule(_scheduleDay, clazz!, subjects!);
+  } else {
+    return fetchSchedule(_scheduleDay, clazz!, subjects!);
+  }
+}

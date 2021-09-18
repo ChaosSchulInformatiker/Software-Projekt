@@ -2,8 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:maristen_planer/constants.dart';
+import 'package:maristen_planer/main.dart';
 import 'package:maristen_planer/properties.dart';
-import 'package:maristen_planer/widgets/classselection.dart';
+import 'package:maristen_planer/widgets/classselection.dart' as cs;
+import 'package:maristen_planer/widgets/schedule.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../utils.dart';
 
 class VerificationScreen extends StatefulWidget {
@@ -18,11 +21,18 @@ class VerificationScreen extends StatefulWidget {
 class _VerificationScreenState extends State<VerificationScreen> {
   final Future<Json> response;
 
-  Widget _body(String status, String? fName, String? lName, int? id) {
+  Widget _body(String status, String? fName, String? lName, int? id, String? clazz_, String? subject_) {
     switch (status) {
       case "SUCCESS":
         print(id);
         saveAccountId(id!);
+        clazz = clazz_;
+        subjects = subject_;
+        (() async {
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setString('class', clazz_!);
+          prefs.setString('subjects', subject_!);
+        })();
         WidgetsBinding.instance?.addPostFrameCallback((_) => _proceedToSelection());
         return Column(children: <Widget>[
           Text('Login erfolgreich! Sie werden in Kürze weitergeleitet.',),
@@ -42,7 +52,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
 
   void _proceedToSelection() {
     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-        builder: (BuildContext context) => ClassSelection()
+        builder: (BuildContext context) => MyApp()       //cs.ClassSelection()
     ), (route) => false);
   }
 
@@ -64,7 +74,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   body: Center(
                     child: Column(
                       children: <Widget>[
-                        _body(result['status'], result['first_name'], result['last_name'], result['id']),
+                        _body(result['status'], result['first_name'], result['last_name'], result['id'], result['class'], result['subjects']),
                         ElevatedButton(onPressed: () {
                           Navigator.pop(context);
                         }, child: Text('Zurück'))

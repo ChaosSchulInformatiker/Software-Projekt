@@ -79,7 +79,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    initSchedule();
+    initSchedule(context);
   }
 
   //Building the App itself

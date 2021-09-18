@@ -7,10 +7,10 @@ import 'main.dart';
 
 const apiRoot = 'https://www.loens2.com/maristenplaner';//'http://localhost:8000';'https://www.loens2.com/maristenplaner';
 
-Future<Json> fetchSchedule(int dayIndex, String clazz, List<String> subjects) async {
+Future<Json> fetchSchedule(int dayIndex, String clazz, String subjects) async {
   print('Fetch schedule');
   print(dayIndex);
-  final subjectsCSV = subjects.join(',');
+  final subjectsCSV = subjects;
   return request('/schedule?day=$dayIndex&class=$clazz&subjects=$subjectsCSV');
 } // /schedule?day=$day&class=$clazz&subjects=$subjectsCSV
 
