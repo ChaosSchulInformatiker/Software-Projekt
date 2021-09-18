@@ -4,6 +4,7 @@ import 'package:maristen_planer/constants.dart';
 import 'package:maristen_planer/properties.dart';
 import 'package:maristen_planer/settings.dart';
 import 'package:maristen_planer/utils.dart';
+import 'package:maristen_planer/widgets/classselection.dart';
 import 'package:maristen_planer/widgets/schedule.dart';
 import 'package:maristen_planer/widgets/sidebar.dart';
 import 'package:maristen_planer/widgets/mensaplan.dart';
@@ -78,7 +79,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-
     initSchedule();
   }
 
