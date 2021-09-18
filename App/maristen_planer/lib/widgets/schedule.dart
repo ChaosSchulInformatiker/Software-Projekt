@@ -36,7 +36,7 @@ Widget _buildSchedule(State state, List<dynamic> lessons) {
       add(
           DataRow(
               color: substituted ? MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-                return Colors.yellow.shade900;  // Use the default value.
+                return teacher == "Entfällt" ? Colors.green.shade900 : Colors.yellow.shade900;
               }) : null,
               cells: <DataCell>[
                 DataCell(Text(li)),
