@@ -183,15 +183,5 @@ void _refresh(State state) async {
 }
 
 Future<Json> _fetchSchedule(BuildContext context) async {
-  final prefs = await SharedPreferences.getInstance();
-  clazz = prefs.getString('class');
-  subjects = prefs.getString('subjects');
-  if (clazz == null || subjects == null) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => ClassSelection()       //cs.ClassSelection()
-    ));
     return fetchSchedule(_scheduleDay, clazz!, subjects!);
-  } else {
-    return fetchSchedule(_scheduleDay, clazz!, subjects!);
-  }
 }

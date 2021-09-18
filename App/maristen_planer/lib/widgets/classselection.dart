@@ -72,7 +72,7 @@ class _ClassSelectionState extends State<ClassSelection> {
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  SubjectSelection((snapshot.data["result"] as List<dynamic>).firstWhere((element) => element["name"] == klasse)["subjects"]),
+                                  SubjectSelection((snapshot.data["result"] as List<dynamic>).firstWhere((element) => element["name"] == klasse)["subjects"], klasse!),
                             ));
                           },
                         )

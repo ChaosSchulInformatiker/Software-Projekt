@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:maristen_planer/constants.dart';
 import 'package:maristen_planer/main.dart';
+import 'package:maristen_planer/requests.dart';
+import 'package:maristen_planer/widgets/schedule.dart' as S;
 
 class SubjectSelection extends StatefulWidget {
   final Map<String, dynamic> subjects;
-  SubjectSelection(this.subjects);
+  final String selectedClass;
+  SubjectSelection(this.subjects, this.selectedClass);
   @override
-  _SubjectSelectionState createState() => _SubjectSelectionState(subjects);
+  _SubjectSelectionState createState() => _SubjectSelectionState(subjects, selectedClass);
 }
 
 class _SubjectSelectionState extends State<SubjectSelection> {
   final Map<String, dynamic> subjects;
-  _SubjectSelectionState(this.subjects);
+  final String selectedClass;
+  _SubjectSelectionState(this.subjects, this.selectedClass);
 
   final selectedSubjects = Set<String>();
 
@@ -81,6 +85,9 @@ class _SubjectSelectionState extends State<SubjectSelection> {
                   style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(maristenBlueLight)),
                   child: Text('Weiter'),
                   onPressed: () {
+                    S.clazz = selectedClass;
+                    S.subjects = selectedSubjects.join(',');
+                    request("/change_class_data?id=$id&class=$selectedClass&subjects=${S.subjects}");
                     Navigator.of(context)//..pop()..pop();
                     .push(MaterialPageRoute(builder: (c) => MyApp()));
                   },

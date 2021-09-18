@@ -52,7 +52,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
 
   void _proceedToSelection() {
     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-        builder: (BuildContext context) => MyApp()       //cs.ClassSelection()
+        builder: (BuildContext context) => cs.ClassSelection()
     ), (route) => false);
   }
 
