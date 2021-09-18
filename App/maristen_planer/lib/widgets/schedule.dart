@@ -25,18 +25,28 @@ Widget _buildSchedule(State state, List<dynamic> lessons) {
               ]
           )
       );
-    else
+    else {
+      final bool substituted = lesson['substituted'];
+      var teacher = lesson['teacher'];
+      String room = lesson['room'];
+      if (teacher == "null") teacher = "Entfällt";
+      if (room.endsWith('"')) room = room.substring(0, room.length - 1);
+      if (room == 'null') room = '-';
       rows.
       add(
           DataRow(
+              color: substituted ? MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+                return Colors.yellow.shade900;  // Use the default value.
+              }) : null,
               cells: <DataCell>[
                 DataCell(Text(li)),
                 DataCell(Text(lesson['subject'])),
-                DataCell(Text(lesson['teacher'])),
-                DataCell(Text(lesson['room'])),
+                DataCell(Text(teacher)),
+                DataCell(Text(room)),
               ]
           )
       );
+    }
   }
   final table = DataTable(
     dataRowHeight: 40,
