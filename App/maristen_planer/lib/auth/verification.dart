@@ -21,18 +21,13 @@ class VerificationScreen extends StatefulWidget {
 class _VerificationScreenState extends State<VerificationScreen> {
   final Future<Json> response;
 
-  Widget _body(String status, String? fName, String? lName, int? id, String? clazz_, String? subject_) {
+  Widget _body(String status, String? fName, String? lName, int? id, String? clazz_, String? subjects_) {
     switch (status) {
       case "SUCCESS":
         print(id);
         saveAccountId(id!);
         clazz = clazz_;
-        subjects = subject_;
-        (() async {
-          final prefs = await SharedPreferences.getInstance();
-          prefs.setString('class', clazz_!);
-          prefs.setString('subjects', subject_!);
-        })();
+        subjects = subjects_;
         WidgetsBinding.instance?.addPostFrameCallback((_) => _proceedToSelection());
         return Column(children: <Widget>[
           Text('Login erfolgreich! Sie werden in Kürze weitergeleitet.',),
@@ -74,7 +69,16 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   body: Center(
                     child: Column(
                       children: <Widget>[
-                        _body(result['status'], result['first_name'], result['last_name'], result['id'], result['class'], result['subjects']),
+                        final prefs = await SharedPreferences.getInstance();
+                        bool clazz_ = prefs.getString('class') ?? ;
+                        bool subjects_ = prefs.getString('subjects') ?? ;
+                        if (clazz_ == null || subjects_ == null) {
+                          clazz_ = result['class'];
+                          if (clazz_ != null) prefs.setString('class', clazz_!);
+                          subjects_ = result['subjects']
+                          if (subjects_ != null) prefs.setString('subjects', subjects_!);
+                        }
+                        _body(result['status'], result['first_name'], result['last_name'], result['id'], clazz_, subjects_),
                         ElevatedButton(onPressed: () {
                           Navigator.pop(context);
                         }, child: Text('Zurück'))
