@@ -40,6 +40,7 @@ data class Schedule @Deprecated("Use Day") constructor(
 
             fun fromRequest(dayIndex: Int, clazz: String, subjectsCSV: String): Day {
                 val subjects = subjectsCSV.split(csvSplitRegex)
+                println("class: $clazz subjects: $subjects")
 
                 val dayTable = getScheduleTable(dayIndex)
 
@@ -102,7 +103,7 @@ fun becauseVisarIsIncompetent(dayTable: Table, t: String, subjects: List<String>
     val likes = dayTable.getLike<String>(t, like, "hour").getOrThrow()
     for (l in likes) {
         val split = l.second.substring(1, l.second.length - 1).split(Schedule.Day.visonRegex)
-        val subject = split[5] + (split[7].takeUnless { it == "0" } ?: "")
+        val subject = split[5]
         if (subject !in subjects) continue
         while (l.first.toString().toInt() > lessons.size) lessons.add(null)
         val substituted = split[11].toBoolean()
