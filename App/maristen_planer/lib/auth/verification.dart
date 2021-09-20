@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:maristen_planer/constants.dart';
-import 'package:maristen_planer/main.dart';
 import 'package:maristen_planer/properties.dart';
 import 'package:maristen_planer/widgets/classselection.dart' as cs;
 import 'package:maristen_planer/widgets/schedule.dart';
@@ -68,21 +67,25 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   ),
                   body: Center(
                     child: Column(
-                      children: <Widget>[
-                        final prefs = await SharedPreferences.getInstance();
-                        bool clazz_ = prefs.getString('class') ?? ;
-                        bool subjects_ = prefs.getString('subjects') ?? ;
-                        if (clazz_ == null || subjects_ == null) {
-                          clazz_ = result['class'];
-                          if (clazz_ != null) prefs.setString('class', clazz_!);
-                          subjects_ = result['subjects']
-                          if (subjects_ != null) prefs.setString('subjects', subjects_!);
+                      children:  (()  {
+                        if (clazz == null || subjects == null) {
+                        clazz = result['class'];
+                        subjects = result['subjects'];
+                        (() async {
+                          final prefs = await SharedPreferences.getInstance();
+                          if (clazz != null) prefs.setString('class', clazz!);
+                          if (subjects != null) prefs.setString('subjects', subjects!);
+                        } )();
                         }
-                        _body(result['status'], result['first_name'], result['last_name'], result['id'], clazz_, subjects_),
+                        return
+                        <Widget>[
+                        _body(result['status'], result['first_name'], result['last_name'], result['id'], clazz, subjects),
                         ElevatedButton(onPressed: () {
-                          Navigator.pop(context);
+                        Navigator.pop(context);
                         }, child: Text('Zurück'))
-                      ]
+
+                        ];
+                      })()
                   )
               )
               );
