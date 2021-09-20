@@ -2,8 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:maristen_planer/constants.dart';
+import 'package:maristen_planer/main.dart';
 import 'package:maristen_planer/properties.dart';
-import '../main.dart';
+import 'package:maristen_planer/widgets/classselection.dart' as cs;
+import 'package:maristen_planer/widgets/schedule.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../utils.dart';
 
 class VerificationScreen extends StatefulWidget {
@@ -18,18 +21,20 @@ class VerificationScreen extends StatefulWidget {
 class _VerificationScreenState extends State<VerificationScreen> {
   final Future<Json> response;
 
-  Widget _body(String status, String? fName, String? lName, int? id) {
+  Widget _body(String status, String? fName, String? lName, int? id, String? clazz_, String? subjects_) {
     switch (status) {
       case "SUCCESS":
         print(id);
         saveAccountId(id!);
-        WidgetsBinding.instance?.addPostFrameCallback((_) => _proceedToHome());
+        clazz = clazz_;
+        subjects = subjects_;
+        WidgetsBinding.instance?.addPostFrameCallback((_) => _proceedToSelection());
         return Column(children: <Widget>[
           Text('Login erfolgreich! Sie werden in Kürze weitergeleitet.',),
           Text('Alternativ drücken Sie bitte diesen Button:'),
           ElevatedButton(
             child: Text('Weiter'),
-            onPressed: _proceedToHome
+            onPressed: _proceedToSelection
           )
         ]);
       case "WRONG_CODE":
@@ -40,9 +45,9 @@ class _VerificationScreenState extends State<VerificationScreen> {
     return Text('...');
   }
 
-  void _proceedToHome() {
+  void _proceedToSelection() {
     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-        builder: (BuildContext context) => MyApp()
+        builder: (BuildContext context) => cs.ClassSelection()
     ), (route) => false);
   }
 
@@ -64,7 +69,16 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   body: Center(
                     child: Column(
                       children: <Widget>[
-                        _body(result['status'], result['first_name'], result['last_name'], result['id']),
+                        final prefs = await SharedPreferences.getInstance();
+                        bool clazz_ = prefs.getString('class') ?? ;
+                        bool subjects_ = prefs.getString('subjects') ?? ;
+                        if (clazz_ == null || subjects_ == null) {
+                          clazz_ = result['class'];
+                          if (clazz_ != null) prefs.setString('class', clazz_!);
+                          subjects_ = result['subjects']
+                          if (subjects_ != null) prefs.setString('subjects', subjects_!);
+                        }
+                        _body(result['status'], result['first_name'], result['last_name'], result['id'], clazz_, subjects_),
                         ElevatedButton(onPressed: () {
                           Navigator.pop(context);
                         }, child: Text('Zurück'))

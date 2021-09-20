@@ -1,8 +1,11 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> saveAccountId(int id) async {
+import 'main.dart';
+
+Future<void> saveAccountId(int id_) async {
+  id = id_;
   final prefs = await SharedPreferences.getInstance();
-  await prefs.setInt('account_id', id);
+  await prefs.setInt('account_id', id_);
 }
 
 Future<int> getAccountId() async {

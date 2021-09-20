@@ -1,10 +1,15 @@
-import 'dart:io';
+
 
 import 'package:flutter/material.dart';
 import 'package:maristen_planer/constants.dart';
 import 'package:maristen_planer/utils.dart';
+import 'package:maristen_planer/widgets/classselection.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../requests.dart';
+
+String? clazz;
+String? subjects;
 
 // Für Kayra
 
@@ -17,6 +22,9 @@ Widget _buildSchedule(State state, List<dynamic> lessons) {
     if (lesson == null)
       rows.add(
           DataRow(
+              color: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+                return Colors.white10;
+              }),
               cells: <DataCell>[
                 DataCell(Text(li)),
                 DataCell(Text('-')),
@@ -25,18 +33,26 @@ Widget _buildSchedule(State state, List<dynamic> lessons) {
               ]
           )
       );
-    else
-      rows.
-      add(
-          DataRow(
-              cells: <DataCell>[
-                DataCell(Text(li)),
-                DataCell(Text(lesson['subject'])),
-                DataCell(Text(lesson['teacher'])),
-                DataCell(Text(lesson['room'])),
-              ]
-          )
+    else {
+      final bool substituted = lesson['substituted'];
+      var teacher = lesson['teacher'];
+      String room = lesson['room'];
+      if (teacher == "null") teacher = "Entfällt";
+      if (room.endsWith('"')) room = room.substring(0, room.length - 1);
+      if (room == 'null') room = '-';
+      final row = DataRow(
+          color: substituted ? MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+            return teacher == "Entfällt" ? Colors.green.shade900 : Colors.yellow.shade900;
+          }) : null,
+          cells: <DataCell>[
+            DataCell(Text(li)),
+            DataCell(Text(lesson['subject'])),
+            DataCell(Text(teacher)),
+            DataCell(Text(room)),
+          ]
       );
+      rows.add(row);
+    }
   }
   final table = DataTable(
     dataRowHeight: 40,
@@ -78,7 +94,7 @@ Widget _buildSchedule(State state, List<dynamic> lessons) {
             child: const Icon(Icons.chevron_left),
             onTap: () {
               --_scheduleDay;
-              if (_scheduleDay < 1) _scheduleDay = 5;
+              if (_scheduleDay < 1) _scheduleDay = 4;
               _refresh(state);
             },
           ),
@@ -108,22 +124,22 @@ Widget _buildSchedule(State state, List<dynamic> lessons) {
 
 late Future<Json> schedule;
 
-void initSchedule() {
-  schedule = fetchSchedule(_scheduleDay-1, '7A', ['D', 'M' , 'E', 'F']);
+void initSchedule(BuildContext context) {
+  schedule = _fetchSchedule(context);
 }
 
 Widget? _widget;
 
-int _scheduleDay = todayIndex();
+int _scheduleDay = scheduleTodayIndex();
 void _decSD(State state) {
   --_scheduleDay;
-  if (_scheduleDay < 1 || _scheduleDay > 5) _scheduleDay = 5;
+  if (_scheduleDay < 0 || _scheduleDay > 4) _scheduleDay = 4;
   _refresh(state);
 }
 void _incSD(State state) {
   ++_scheduleDay;
-  if (_scheduleDay == 6) _scheduleDay = 1;
-  else if (_scheduleDay > 6) _scheduleDay = 2;
+  if (_scheduleDay == 5) _scheduleDay = 0;
+  else if (_scheduleDay > 5) _scheduleDay = 1;
   _refresh(state);
 }
 
@@ -132,6 +148,7 @@ Widget scheduleWidget(State state) =>
     FutureBuilder<Json>(
         future: schedule,
         builder: (context, snapshot) {
+          print(snapshot);
           if (snapshot.hasData) {
             final List<dynamic> lessons = snapshot.data!['result'][0]['lessons']; //['days'][scheduleTodayIndex()]
 
@@ -159,8 +176,12 @@ Widget scheduleWidget(State state) =>
     );
 
 void _refresh(State state) async {
-  await (schedule = fetchSchedule(_scheduleDay-1, '7A', ['D', 'M' , 'E', 'F']));
+  await (schedule = _fetchSchedule(state.context));
   state.setState(() {
     _widget = null;
   });
+}
+
+Future<Json> _fetchSchedule(BuildContext context) async {
+    return fetchSchedule(_scheduleDay, clazz!, subjects!);
 }
