@@ -3,6 +3,7 @@ import 'package:maristen_planer/constants.dart';
 import 'package:maristen_planer/main.dart';
 import 'package:maristen_planer/requests.dart';
 import 'package:maristen_planer/widgets/schedule.dart' as S;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SubjectSelection extends StatefulWidget {
   final Map<String, dynamic> subjects;
@@ -58,23 +59,27 @@ class _SubjectSelectionState extends State<SubjectSelection> {
             child: ListTileTheme(
               contentPadding: EdgeInsets.fromLTRB(14.0, 0.0, 24.0, 0.0),
               child: ListBody(
-                children: subjects.keys.map((value) {
-                  final checked = selectedSubjects.contains(value);
-                  return CheckboxListTile(
+                children: (() {
+                  final list = <CheckboxListTile>[];
+                  subjects.forEach((v, k) {
+                    final checked = selectedSubjects.contains(v);
+                    list.add( CheckboxListTile(
                       value: checked,
-                      title: Text(value),
+                      title: Text("$v ($k)"),
                       controlAffinity: ListTileControlAffinity.leading,
                       onChanged: (checked) {
                         setState(() {
                           if (checked == true) {
-                            selectedSubjects.add(value);
+                            selectedSubjects.add(v);
                           } else if (checked == false) {
-                            selectedSubjects.remove(value);
+                            selectedSubjects.remove(v);
                           }
                         });
                       },
-                  );
-                }).toList(),
+                    ));
+                  });
+                  return list;
+                  } )(),
               ),
             ),
           ),
@@ -87,6 +92,11 @@ class _SubjectSelectionState extends State<SubjectSelection> {
                   onPressed: () {
                     S.clazz = selectedClass;
                     S.subjects = selectedSubjects.join(',');
+                    (() async {
+                      final prefs = await SharedPreferences.getInstance();
+                      prefs.setString("class", S.clazz!);
+                      prefs.setString("subjects", S.subjects!);
+                    } )();
                     // Für debugging zwecke weggelassen
                     //request("/change_class_data?id=$id&class=$selectedClass&subjects=${S.subjects}");
                     Navigator.of(context)//..pop()..pop();

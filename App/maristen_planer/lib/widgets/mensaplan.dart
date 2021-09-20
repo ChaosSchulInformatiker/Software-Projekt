@@ -24,11 +24,6 @@ class _MensaplanState extends State<Mensaplan> {
 
   void initState() {
     super.initState();
-    fromAsset('assets/Speisekarte_KW_38.pdf', 'Speisekarte_KW_38.pdf').then((f) {
-      setState(() {
-        pathPDF = f.path;
-      });
-    });
     createFileOfPdfUrl().then((f) {
       setState(() {
         remotePDFpath = f.path;
@@ -59,23 +54,6 @@ class _MensaplanState extends State<Mensaplan> {
     return completer.future;
   }
 
-  Future<File> fromAsset(String asset, String filename) async {
-    // To open from assets, you can copy them to the app storage folder, and the access them "locally"
-    Completer<File> completer = Completer();
-
-    try {
-      var dir = await getApplicationDocumentsDirectory();
-      File file = File("${dir.path}/$filename");
-      var data = await rootBundle.load(asset);
-      var bytes = data.buffer.asUint8List();
-      await file.writeAsBytes(bytes, flush: true);
-      completer.complete(file);
-    } catch (e) {
-      throw Exception('Error parsing asset file!');
-    }
-
-    return completer.future;
-  }
 
 
   @override
@@ -97,19 +75,6 @@ class _MensaplanState extends State<Mensaplan> {
                           )
                         );
                       }
-                  },
-                ),
-                TextButton(
-                  child: Text("test"),
-                  onPressed: () {
-                    if (pathPDF.isNotEmpty) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PDFScreen(path: pathPDF,),
-                        )
-                      );
-                    }
                   },
                 ),
               ],
@@ -140,12 +105,6 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
     return Scaffold(
       appBar: AppBar(
         title: Text("Mensaplan"),
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.share),
-              onPressed: () {},
-          )
-        ],
       ),
       body: Stack(
         children: <Widget>[
@@ -200,21 +159,6 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
             child: Text(errorMessage),
           )
         ],
-      ),
-      floatingActionButton: FutureBuilder<PDFViewController>(
-        future: _controller.future,
-        builder: (context, AsyncSnapshot<PDFViewController> snapshot) {
-          if (snapshot.hasData) {
-            return FloatingActionButton.extended(
-              label: Text("Go to ${pages! ~/ 2}"),
-              onPressed: () async {
-                await snapshot.data!.setPage(pages! ~/ 2);
-              },
-            );
-          }
-
-          return Container();
-        },
       ),
     );
   }

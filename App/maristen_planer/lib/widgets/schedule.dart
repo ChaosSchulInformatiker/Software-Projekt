@@ -183,5 +183,10 @@ void _refresh(State state) async {
 }
 
 Future<Json> _fetchSchedule(BuildContext context) async {
+    if (clazz == null || subjects == null) {
+      final prefs = await SharedPreferences.getInstance();
+      clazz = prefs.getString("class");
+      subjects = prefs.getString("subjects");
+    }
     return fetchSchedule(_scheduleDay, clazz!, subjects!);
 }

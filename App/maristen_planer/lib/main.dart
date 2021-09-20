@@ -4,15 +4,18 @@ import 'package:maristen_planer/constants.dart';
 import 'package:maristen_planer/properties.dart';
 import 'package:maristen_planer/settings.dart';
 import 'package:maristen_planer/utils.dart';
-import 'package:maristen_planer/widgets/classselection.dart';
 import 'package:maristen_planer/widgets/schedule.dart';
 import 'package:maristen_planer/widgets/sidebar.dart';
 import 'package:maristen_planer/widgets/mensaplan.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   settings.length; // Load settings
   id = await getAccountId();
+  final prefs = await SharedPreferences.getInstance();
+  clazz = prefs.getString('class');
+  subjects = prefs.getString('subjects');
   final themeMode = themeDataOfMode(await settings[0].settings[0].getValue());
   print(themeMode);
   runApp(MaterialApp(
