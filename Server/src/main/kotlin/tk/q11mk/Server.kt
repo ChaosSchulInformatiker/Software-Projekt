@@ -35,10 +35,10 @@ fun main() {
                     call.respond400()
                     return@get
                 }
-                /*if (authorization == null || getAccountFromId(authorization) == null) {
+                if (authorization == null || getAccountFromId(authorization) == null) {
                     call.respond403()
                     return@get
-                }*/
+                }
 
 
                 //call.response(exampleSchedule[day])
