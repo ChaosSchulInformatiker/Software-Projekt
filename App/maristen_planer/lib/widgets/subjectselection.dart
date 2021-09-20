@@ -87,7 +87,8 @@ class _SubjectSelectionState extends State<SubjectSelection> {
                   onPressed: () {
                     S.clazz = selectedClass;
                     S.subjects = selectedSubjects.join(',');
-                    request("/change_class_data?id=$id&class=$selectedClass&subjects=${S.subjects}");
+                    // Für debugging zwecke weggelassen
+                    //request("/change_class_data?id=$id&class=$selectedClass&subjects=${S.subjects}");
                     Navigator.of(context)//..pop()..pop();
                     .push(MaterialPageRoute(builder: (c) => MyApp()));
                   },
