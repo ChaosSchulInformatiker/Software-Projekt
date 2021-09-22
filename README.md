@@ -8,7 +8,6 @@
 - ☑ Software für das Sekretariat um schneller und einfacher Krankmeldungen von Schülern & Lehrern zu bearbeiten
 
 ## Die Software wird bestehen aus
-- 🌐 Einer Webapplikation für Schüler & Lehrer
 - 💻 Einem Programm für das Sekretariat
 - 📱 Einer Android Applikation für Schüler & Lehrer
 
