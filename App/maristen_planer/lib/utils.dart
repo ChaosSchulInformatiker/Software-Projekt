@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:maristen_planer/settings.dart';
 
 int todayIndex() => DateTime.now().weekday;
 
+int getCalendarWeek(DateTime time) {
+  int day = int.parse((new DateFormat("D")).format(time));
+  int fwd = (new DateTime(time.year)).weekday-1;
+  if (day < 7-fwd) {
+    return getCalendarWeek((new DateTime(time.year)).subtract(new Duration(days: 1)));
+  }
+  return (day+fwd)~/7;
+}
 
 int scheduleTodayIndex() {
   int ti = todayIndex();

@@ -16,6 +16,7 @@ dependencies:
 
   path_provider: ^2.0.4
   flutter_pdfview: ^1.2.1
+  intl: ^0.17.0
   http: ^0.13.3
   shared_preferences: ^2.0.6
 
@@ -41,6 +42,7 @@ flutter:
 
   assets:
     - "assets/icon.png"
+    - "assets/DSGVO.pdf"
 
 flutter_icons:
   android: true

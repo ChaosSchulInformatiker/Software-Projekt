@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:maristen_planer/utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 
@@ -43,7 +44,7 @@ class _MensaplanState extends State<Mensaplan> {
     print("Start download file from internet!");
     try {
       final now = DateTime.now();
-      final url = "https://www.maristenkolleg.de/wp-content/uploads/${now.year}/Mensaplan/Speiseplan_KW_${((now.day)+(new DateTime(now.year).weekday-1)/7)}.pdf";
+      final url = "https://www.maristenkolleg.de/wp-content/uploads/${now.year}/Mensaplan/Speiseplan_KW_${getCalendarWeek(now)}.pdf";
       final filename = url.substring(url.lastIndexOf("/") + 1);
       var request = await HttpClient().getUrl(Uri.parse(url));
       var response = await request.close();
