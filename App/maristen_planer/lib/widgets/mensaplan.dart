@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 
@@ -16,9 +16,16 @@ class Mensaplan extends StatefulWidget {
 
 class _MensaplanState extends State<Mensaplan> {
 
-  String pathPDF = "";
-  String landscapePathPdf = "";
+  final Completer<PDFViewController> _controller =
+  Completer<PDFViewController>();
+  int? pages = 0;
+  int? currentPage = 0;
+  bool isReady = false;
+  String errorMessage = '';
+
   String remotePDFpath = "";
+
+  String localPath = "";
 
   @override
 
@@ -35,7 +42,8 @@ class _MensaplanState extends State<Mensaplan> {
     Completer<File> completer = Completer();
     print("Start download file from internet!");
     try {
-      final url = "https://www.maristenkolleg.de/wp-content/uploads/2021/Mensaplan/Speiseplan_KW_38.pdf";
+      final now = DateTime.now();
+      final url = "https://www.maristenkolleg.de/wp-content/uploads/${now.year}/Mensaplan/Speiseplan_KW_${((now.day)+(new DateTime(now.year).weekday-1)/7)}.pdf";
       final filename = url.substring(url.lastIndexOf("/") + 1);
       var request = await HttpClient().getUrl(Uri.parse(url));
       var response = await request.close();
@@ -54,62 +62,13 @@ class _MensaplanState extends State<Mensaplan> {
     return completer.future;
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Builder(
-          builder: (BuildContext context){
-            return Column(
-              children: <Widget>[
-                TextButton(
-                    child: Text("Online Plan öffnen"),
-                  onPressed: () {
-                      if (remotePDFpath.isNotEmpty){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PDFScreen(path: remotePDFpath),
-                          )
-                        );
-                      }
-                  },
-                ),
-              ],
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class PDFScreen extends StatefulWidget {
-  final String? path;
-  PDFScreen({Key? key, this.path}) : super(key: key);
-  _PDFScreenState createState() => _PDFScreenState();
-}
-
-class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
-  final Completer<PDFViewController> _controller =
-      Completer<PDFViewController>();
-  int? pages = 0;
-  int? currentPage = 0;
-  bool isReady = false;
-  String errorMessage = '';
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Mensaplan"),
-      ),
       body: Stack(
-        children: <Widget>[
+        children: remotePDFpath == "" ? <Widget>[Center(child: CircularProgressIndicator())] : <Widget>[
           PDFView(
-            filePath: widget.path,
+            filePath: remotePDFpath,
             enableSwipe: true,
             swipeHorizontal: true,
             autoSpacing: false,
