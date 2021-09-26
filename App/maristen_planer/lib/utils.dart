@@ -10,7 +10,7 @@ int getCalendarWeek(DateTime time) {
   if (day < 7-fwd) {
     return getCalendarWeek((new DateTime(time.year)).subtract(new Duration(days: 1)));
   }
-  return (day+fwd)~/7;
+  return (day+fwd+3)~/7;
 }
 
 int scheduleTodayIndex() {
