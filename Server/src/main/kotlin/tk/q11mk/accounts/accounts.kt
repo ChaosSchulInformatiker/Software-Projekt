@@ -21,10 +21,8 @@ private class VCValue(
 )
 
 suspend fun CoroutineScope.sendCode(firstName: String, lastName: String, email: String): RegisterResponse {
-    //var email: String? = null
     val code = generateCode()
     val valid = try {
-        //email = getEmailAccount(firstName, lastName)
         Mail.sendEmail(senderEmail, email, senderPassword, firstName, code)
         true
     } catch (e: MessagingException) {
@@ -44,8 +42,8 @@ class RegisterResponse(
 )
 
 fun receiveCode(email: String, code: Int): LoginResponse {
-    val vcValue = /*VCValue("Simon", "Neumann", 12345)*/verificationCache[email]
-    var status = /*LoginResponse.Status.SUCCESS*/vcValue?.let {
+    val vcValue = verificationCache[email]
+    var status = vcValue?.let {
         if (it.code == code) LoginResponse.Status.SUCCESS else LoginResponse.Status.WRONG_CODE
     } ?: LoginResponse.Status.WRONG_EMAIL
     if (status == LoginResponse.Status.SUCCESS) {

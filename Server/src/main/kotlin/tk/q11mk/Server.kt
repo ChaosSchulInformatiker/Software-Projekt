@@ -40,8 +40,6 @@ fun main() {
                     return@get
                 }
 
-
-                //call.response(exampleSchedule[day])
                 call.response(Schedule.Day.fromRequest(dayIndex, clazz, subjectsCSV))
             }
 
